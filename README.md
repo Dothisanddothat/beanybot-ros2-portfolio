@@ -1,4 +1,4 @@
-# BeanyBot ROS 2 Portfolio
+# BeanyBot Robotics Engineering Portfolio
 
 A public robotics engineering portfolio documenting my learning journey with ROS 2 and modern robotics software.
 
