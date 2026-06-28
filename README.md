@@ -1,44 +1,20 @@
 # BeanyBot Robotics Engineering Portfolio
 
-A public robotics engineering portfolio documenting my learning journey with ROS 2 and modern robotics software.
+This repository documents my robotics engineering learning journey as I develop expertise in ROS 2, Gazebo, RViz2, Nav2, MoveIt 2, Foxglove Studio, and NVIDIA Isaac Sim while preparing for future autonomous agricultural robotics research.
+
+## Acknowledgment
+
+This project was supported by USDA NIFA NextGen grant to the California State University Agricultural Research Institute, award number 2023-70440-40177.
+
+---
 
 ## Technologies
 
 - ROS 2 Humble
 - Python
 - Gazebo
-- RViz
+- RViz2
 - Nav2
 - MoveIt 2
 - Foxglove Studio
-- NVIDIA Isaac Sim (learning)
-- Git & GitHub
-
-## Portfolio Goals
-
-- Learn ROS 2 software development
-- Build navigation and manipulation skills
-- Document engineering progress
-- Practice professional Git workflows
-- Share reproducible robotics learning examples
-
-## Repository Contents
-
-- Daily engineering log
-- Tutorials completed
-- Notes and observations
-- Example ROS 2 projects
-- Motion planning studies
-
-## Learning Roadmap
-
-- [x] ROS 2 Basics
-- [x] Python Nodes
-- [x] Gazebo
-- [x] RViz
-- [x] Nav2
-- [x] MoveIt 2 Basics
-- [ ] Advanced MoveIt Planning
-- [ ] NVIDIA Isaac Sim
-- [ ] Foxglove Dashboards
-- [ ] Multi-Robot Simulation
+- NVIDIA Isaac Sim
