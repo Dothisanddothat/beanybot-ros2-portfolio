@@ -73,3 +73,11 @@ This study will help when implementing future ROS2 MoveIt manipulation projects.
 
 Next study session:
 Continue through the remaining MoveGroupCommander API functions before moving into additional MoveIt tutorials.
+Day_Log 2026-06-29:
+I Completed BeanyBot Robotics Podcast Episode 12.
+Interviewed a Ghanaian cocoa cooperative leader.
+He confirmed labor shortage remains the primary operational challenge.
+I learned pods should ideally be collected within four days after harvest to help preserve bean quality.
+I Identified pod breaking as the most labor-intensive post-harvest activity.
+I Added pollination to the list of future research topics after it was raised for the first time during the podcast.
+I am continuing my requirements gathering for future agricultural robotics research.
