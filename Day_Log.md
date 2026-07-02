@@ -195,15 +195,26 @@ group.stop()
 Each step has a distinct purpose: set_joint_value_target() — Defines the desired joint configuration. plan() — Computes a safe trajectory from the current position to that target. go() — Executes the planned motion. stop() — Ensures any residual motion commands are halted after execution. As your mentor has emphasized, A robotics engineer should be able to explain why each line exists. 
 For set_joint_value_target(), the "why" is: It defines the goal but does not move the robot. It can accept several kinds of inputs (lists, dictionaries, single joints, or poses), making it flexible for different applications. When given a pose, MoveIt uses Inverse Kinematics to convert that desired end-effector position into the joint angles needed to reach it. It is the first step in almost every MoveIt motion-planning workflow. Understanding that distinction, setting a target versus executing motion, is a hallmark of understanding MoveIt rather than just using it.
 
-## July 2, 2026
+## July 2, 2026 – ROS 2 TF2 Fundamentals
 
-Completed the ROS 2 Humble Turtlesim prerequisite tutorial.
+Today I completed the ROS 2 Humble **Introduction to TF2** tutorial.
 
-- Verified the turtlesim package was installed.
-- Successfully launched `turtlesim_node`.
-- Successfully launched `turtle_teleop_key`.
-- Controlled the simulated turtle using the keyboard.
-- Observed ROS 2 node communication through teleoperation.
-- Prepared to begin the ROS 2 launch file tutorial.
-- # Screenshot of the frames_2026-07-02_12.54.31pdf
-- 
+### Completed
+- Launched the TF2 TurtleSim demonstration.
+- Controlled the leader turtle while observing the follower turtle use TF2 transforms.
+- Generated and analyzed the TF frame graph using `view_frames`.
+- Used `tf2_echo` to observe live translation and rotation data between coordinate frames.
+- Visualized the TF frame tree in RViz2.
+
+### Key Concepts Learned
+- Coordinate frames define the position and orientation of objects in ROS 2.
+- TF2 continuously publishes transforms between coordinate frames.
+- `view_frames` generates a visualization of the TF tree.
+- `tf2_echo` displays live transform data between frames.
+- RViz2 provides a real-time visualization of TF relationships.
+
+### Reflection
+Today's work strengthened my understanding of one of the core building blocks of ROS 2. A solid understanding of TF2 will support future work in robot perception, visualization, motion planning, and manipulation.
+
+**Status:** TF2 tutorial completed successfully.
+
