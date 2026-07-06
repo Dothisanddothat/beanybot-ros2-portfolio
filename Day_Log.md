@@ -218,3 +218,102 @@ Today's work strengthened my understanding of one of the core building blocks of
 
 **Status:** TF2 tutorial completed successfully.
 ## MoveIt2 commander API: 
+
+## July 5, 2026 – MoveIt Motion Planning Parameters for Precision Cocoa Harvesting:
+
+Today I continued studying the MoveIt Python API (MoveGroupCommander) to better understand how autonomous manipulators can perform safe, precise agricultural tasks. Rather than simply learning new functions, I focused on how each capability could eventually contribute to the BeanyBot cocoa harvesting workflow.
+
+Topics Studied
+
+Motion Speed Control
+
+Learned how to use:
+
+set_max_velocity_scaling_factor()
+
+to reduce the robot arm's joint velocity.
+
+Rather than always moving at maximum speed, the robot can intentionally slow its approach while nearing a cocoa pod. This should improve positioning accuracy, reduce overshoot, and minimize unintended impacts with branches or neighboring pods.
+
+Motion Acceleration Control
+
+Learned how to use:
+
+set_max_acceleration_scaling_factor()
+
+to limit how aggressively the arm accelerates and decelerates.
+
+Lower acceleration values produce smoother starts and stops, reducing mechanical shock and allowing the manipulator to move more carefully around delicate crops.
+
+Named Joint Configurations
+
+Studied:
+
+set_named_target()
+
+which allows predefined robot poses to be stored and recalled by name.
+
+Potential BeanyBot poses include:
+
+Home
+Walk
+Detect
+Cut Ready
+Cut
+Drop
+Rest
+Charge
+
+Using named configurations should simplify future workflow code while improving readability and maintainability.
+
+Motion Planning Attempts
+
+Studied:
+
+set_num_planning_attempts()
+
+MoveIt can attempt multiple motion plans before selecting the best trajectory.
+
+This may become valuable when navigating the arm around cocoa branches, pods, and the robot's own links, increasing the probability of finding smooth collision-free motions.
+
+End Effector Orientation
+
+Studied:
+
+set_orientation_target()
+
+This function controls the orientation of the end effector independently from its position.
+
+For a future harvesting system using a mounted pruning tool, maintaining the correct blade orientation may be critical for approaching the cocoa pod stem at an effective cutting angle.
+
+Path Constraints
+
+Studied:
+
+set_path_constraints()
+
+This allows motion rules to remain active throughout an entire trajectory.
+
+Potential agricultural applications include:
+
+Maintaining a vertical cutting tool
+Limiting wrist rotation
+Keeping the arm within safe operating angles
+Preventing unnecessary twisting while moving through tree canopies
+BeanyBot Design Reflection
+
+Today's MoveIt study reinforced that successful agricultural robotics depends on precision rather than speed.
+
+A future cocoa harvesting robot must:
+
+Move smoothly around trees.
+Maintain proper tool orientation.
+Reduce sudden arm acceleration.
+Select collision-free trajectories.
+Return to predefined safe poses after each harvesting cycle.
+
+These concepts will likely become important building blocks as I continue progressing from MoveIt tutorials toward Isaac Sim simulations and eventually integrating a harvesting end-effector with the BeanyBot platform.
+
+Hours Invested
+
+Approximately 3–4 hours studying MoveIt motion planning concepts, API documentation, and evaluating their potential application to autonomous cocoa harvesting.
