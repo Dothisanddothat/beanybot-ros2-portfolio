@@ -317,3 +317,37 @@ These concepts will likely become important building blocks as I continue progre
 Hours Invested
 
 Approximately 3–4 hours studying MoveIt motion planning concepts, API documentation, and evaluating their potential application to autonomous cocoa harvesting.
+July 6, 2026 – Completing My Study of MoveIt's MoveGroupCommander API
+
+Today I completed my review of the public methods available in MoveIt's MoveGroupCommander Python API. This study helped me better understand how MoveIt plans, executes, and safely manages robotic manipulator motion.
+
+Topics Studied
+
+During today's study I learned about:
+
+shift_pose_target() – Making small incremental adjustments to an end-effector's position or orientation without defining an entirely new target pose.
+stop() – Safely interrupting robot motion during execution.
+Start states and current robot states for motion planning.
+Workspace boundaries and trajectory constraints.
+Motion planner selection and planning pipelines.
+Position, orientation, and Roll-Pitch-Yaw target definitions.
+Velocity and acceleration scaling factors for smooth robot motion.
+Key Takeaways
+
+One of the biggest lessons from today's study is that successful robotic manipulation depends on much more than simply commanding a robot to "move."
+
+Motion planning involves:
+
+Choosing an appropriate planner.
+Defining the robot's starting state.
+Specifying precise position and orientation goals.
+Applying motion and trajectory constraints.
+Limiting velocity and acceleration for safe operation.
+Making fine adjustments when necessary.
+Providing mechanisms to safely stop robot motion.
+
+These concepts form the foundation of autonomous manipulation in many robotics applications, including manufacturing, warehouse automation, medical robotics, and agricultural robotics.
+
+Looking Ahead
+
+My next objective is to continue applying these MoveIt concepts while progressing toward Isaac Sim simulation and future autonomous manipulation workflows. Understanding these core APIs provides an important foundation for future robotics development.
