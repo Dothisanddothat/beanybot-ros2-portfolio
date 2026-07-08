@@ -469,3 +469,37 @@ You still know your hand belongs to you, not to the environment.
 
 The self-filter gives the robot a similar capability. It allows the robot to ignore its own body when interpreting depth data, so it can focus on external objects that matter for planning. 
 ## Day_Log Wedensday July 8 2026:
+July 8, 2026
+
+Today's focus was completing the official ROS 2 Humble TF2 Static Broadcaster (Python) tutorial.
+
+Accomplishments
+Successfully created the learning_tf2_py ROS 2 package.
+Corrected the package location by moving it into the workspace src/ directory.
+Updated package.xml with the required dependencies, including:
+rclpy
+tf2_ros
+tf2_ros_py
+geometry_msgs
+turtlesim
+python3-numpy
+Updated setup.py with the required console_scripts entry:
+static_turtle_tf2_broadcaster
+Created the static_turtle_tf2_broadcaster.py node from the official ROS 2 Humble tutorial.
+Successfully built the package using:
+colcon build --packages-select learning_tf2_py
+Successfully sourced the workspace.
+Ran the static TF2 broadcaster.
+Verified the transform using:
+ros2 run tf2_ros tf2_echo world mystatic
+Results
+Static transform published successfully.
+Translation, quaternion, rotation matrix, and Euler angles displayed correctly.
+No build or runtime errors after package corrections.
+Lessons Learned
+ROS 2 packages must reside inside the workspace src/ directory.
+setup.py and package.xml must be configured correctly before building.
+TF2 static broadcasters publish a transform once that remains constant throughout execution.
+tf2_echo is an effective tool for verifying transforms.
+Git commit was postponed because the current workspace is not initialized as a Git repository.
+## Day_Log Thursday July 9 2026:
