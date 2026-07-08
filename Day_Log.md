@@ -502,4 +502,25 @@ setup.py and package.xml must be configured correctly before building.
 TF2 static broadcasters publish a transform once that remains constant throughout execution.
 tf2_echo is an effective tool for verifying transforms.
 Git commit was postponed because the current workspace is not initialized as a Git repository.
+# Day Log – ROS 2 TF2 Listener & Launch File Investigation
+
+Today I continued working through the ROS 2 Humble TF2 tutorials.
+
+## Completed
+- Reviewed the TF2 Listener architecture.
+- Created the `turtle_tf2_listener.py` node.
+- Updated `setup.py` with the new console script entry.
+- Learned how ROS 2 installs Python executables through `console_scripts`.
+- Created and configured the `launch` directory.
+- Added launch file installation to `setup.py`.
+- Successfully rebuilt the package multiple times using `colcon build`.
+- Verified package installation and workspace sourcing.
+
+## Debugging Experience
+During testing I encountered launch file and TF broadcaster issues that prevented the complete demo from running correctly. The listener node launched successfully, but the static TF broadcasters exited due to launch argument configuration problems. Rather than continuing to patch the tutorial, I decided to pause and begin a fresh lesson with a clean environment.
+
+## Takeaways
+Today's session reinforced how important package configuration, launch files, and executable registration are in ROS 2. Even though the final demo did not complete, I gained a much deeper understanding of the ROS 2 package structure and the debugging process.
+
+Tomorrow I'll continue with a fresh tutorial and keep moving toward the larger goal of autonomous agricultural robotics for BeanyBot.
 ## Day_Log Thursday July 9 2026:
