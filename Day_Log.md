@@ -1020,5 +1020,536 @@ By the end of this tutorial, I should understand these core ideas:
 
 For my ROS 2 and TIAGo work at Sonoma State, Foxglove will become one of my most valuable tools. As I start integrating navigation, MoveIt, cameras, you'll use Foxglove to verify that all of your sensors, robot state, and AI decisions are working together correctly.
 
+## FoxGlove tutorial (3): Navigate the Foxglove app with confidence:
+
+Here's the tutorial explained in plain English.
+
+---
+
+# What was the purpose of this tutorial?
+
+The first tutorial taught you **what Foxglove can display**.
+
+This tutorial teaches you
+
+> **how to navigate Foxglove.**
+
+It's like learning where the steering wheel, mirrors, dashboard, and controls are before driving a car.
+
+---
+
+# Dashboard
+
+When Foxglove opens, you arrive at the **Dashboard**.
+
+Think of it as the home screen.
+
+From here you can:
+
+* Open a recording
+* Connect to a robot
+* Upload data
+* Open recent work
+* Browse examples
+
+It's similar to Microsoft Word opening to the "Recent Documents" page.
+
+---
+
+# Open Local File
+
+If your robot already finished driving...
+
+and you recorded everything...
+
+you simply open the recording.
+
+Example:
+
+```
+Today's TIAGo navigation test
+```
+
+or
+
+```
+
+```
+
+Foxglove replays it.
+
+---
+
+# Open Connection
+
+This is one of the most important buttons.
+
+Instead of watching yesterday's recording...
+
+you connect directly to a robot that is running **right now.**
+
+Imagine watching TIAGo driving through the lab live.
+
+Every sensor updates instantly.
+
+This is called
+
+**live telemetry.**
+
+---
+
+# Upload File
+
+Suppose you're working with another robotics engineer.
+
+Instead of emailing a huge recording...
+
+you upload it to Foxglove Cloud.
+
+Now everyone can view the exact same recording.
+
+---
+
+# Recent Recordings
+
+Foxglove remembers what you recently opened.
+
+Exactly like Word remembers recent documents.
+
+No need to browse for them again.
+
+---
+
+# Example Datasets
+
+Foxglove gives you sample robots.
+
+This is great for learning.
+
+Even if you don't own a robot...
+
+you can practice.
+
+---
+
+# Documentation
+
+Whenever you forget something...
+
+this takes you to Foxglove's manuals.
+
+You'll use these often.
+
+Even experienced robotics engineers do.
+
+---
+
+# Devices
+
+A device simply means
+
+> A robot.
+
+Suppose BeanyBot owns:
+
+* TIAGo
+* Optimus
+
+Foxglove treats each as a separate device.
+
+You can organize them by:
+
+* name
+* location
+* customer
+* farm
+* serial number
+
+---
+
+# Recordings
+
+Think of recordings as
+
+> Robot movies.
+
+Every time the robot works...
+
+Foxglove saves a recording.
+
+Later you can search them.
+
+Example
+
+```
+July 3
+```
+
+```
+July 8
+```
+
+```
+July 15
+```
+
+Instead of hundreds of random files...
+
+everything stays organized.
+
+---
+
+# Events
+
+Events are bookmarks.
+
+Suppose your robot got stuck.
+
+Instead of remembering
+
+"around 12 minutes..."
+
+you create an event.
+
+Example:
+
+```
+Obstacle detected
+```
+
+or
+
+```
+Failed grasp
+```
+
+or
+
+```
+Battery low
+```
+
+Now Foxglove jumps directly there.
+
+Very useful.
+
+---
+
+# Timeline
+
+Imagine your robot worked for six months.
+
+The Timeline lets you zoom from
+
+Year
+
+↓
+
+Month
+
+↓
+
+Day
+
+↓
+
+Hour
+
+↓
+
+Minute
+
+↓
+
+Second
+
+until you find the exact recording you need.
+
+---
+
+# Layouts
+
+A layout is simply
+
+> A dashboard arrangement.
+
+Example
+
+Navigation Layout
+
+* LiDAR
+* Map
+* Camera
+
+Another layout
+
+Manipulator Layout
+
+* Arm joints
+* Wrist camera
+* Gripper
+
+Another
+
+Battery Layout
+
+* Voltage
+* Current
+* Temperature
+
+Instead of rebuilding your dashboard every day...
+
+Foxglove remembers it.
+
+---
+
+# Panels
+
+Panels are windows.
+
+Examples:
+
+Camera panel
+
+Shows camera.
+
+Plot panel
+
+Shows graphs.
+
+3D panel
+
+Shows robot.
+
+Raw Message panel
+
+Shows numbers.
+
+Map panel
+
+Shows map.
+
+Think of them as apps on your phone.
+
+---
+
+# Drag and Drop
+
+This is one of Foxglove's best features.
+
+You simply drag
+
+```
+Camera
+```
+
+into
+
+```
+Image Panel
+```
+
+Instantly it appears.
+
+Drag
+
+```
+Laser Scan
+```
+
+into
+
+```
+3D Panel
+```
+
+Now you see LiDAR.
+
+No programming required.
+
+---
+
+# Topics
+
+Topics are still
+
+information channels.
+
+Every sensor publishes one.
+
+Examples
+
+```
+Camera
+```
+
+```
+LiDAR
+```
+
+```
+GPS
+```
+
+```
+Battery
+```
+
+```
+Robot Arm
+```
+
+You drag topics into panels.
+
+---
+
+# Problems Tab
+
+This is like your car's
+
+Check Engine Light.
+
+If something is wrong...
+
+Foxglove tells you.
+
+For example
+
+Missing transform
+
+Missing camera
+
+Bad topic
+
+Broken connection
+
+Always check this first.
+
+---
+
+# Playback Controls
+
+Exactly like YouTube.
+
+Play
+
+Pause
+
+Fast forward
+
+Rewind
+
+Loop
+
+Slow motion
+
+Very useful when debugging.
+
+---
+
+# Playback Speed
+
+Instead of watching a robot drive for ten minutes...
+
+watch it at
+
+2×
+
+or
+
+4×
+
+speed.
+
+Or slow it down.
+
+Perfect for catching bugs.
+
+---
+
+# Playback Range
+
+Suppose your robot fails
+
+between
+
+2:10
+
+and
+
+2:40.
+
+Instead of replaying twenty minutes...
+
+Foxglove only replays
+
+those thirty seconds.
+
+Huge time saver.
+
+---
+
+# Extensions
+
+Extensions are add-ons.
+
+Just like Chrome extensions.
+
+People build tools that add new features.
+
+---
+
+# Settings
+
+Here you change
+
+Dark Mode
+
+Profile
+
+Appearance
+
+Debugging
+
+Extensions
+
+General preferences.
+
+---
+
+# About
+
+This simply tells you
+
+what version of Foxglove you are using.
+
+If something breaks...
+
+support will ask for this.
+
+---
+
+
+
+Instead of searching through hours of recordings, you'll be able to jump directly to the important moments and analyze exactly what happened.
+
+---
+
+## What you should remember from Tutorial #2
+
+The key lesson is that **Foxglove is more than a viewer—it's an organized workspace for robotics development**. It helps you:
+
+* Organize robots ("Devices")
+* Store and search recordings
+* Mark important moments with Events
+* Reuse custom dashboards (Layouts)
+* Display data using Panels
+* Inspect ROS 2 Topics
+* Replay recordings at any speed
+* Troubleshoot using the Problems tab
+
+For your work with **ROS 2, TIAGo, Isaac Sim, learning these navigation tools will make debugging and analyzing robot behavior much faster as your projects become more complex.
+## Issac Sim: Understanding the Pick-and-Place State Machine: 
+
 
 
