@@ -558,4 +558,467 @@ Every simulation frame updates robot joints, collisions, sensors, and controller
 Initialization order is important to ensure articulations and physics tensors are valid before control begins.
 Good robotics software includes timeout protection and graceful shutdown procedures.
 
+## FoxGlove Tutorial One: July 15, 2026: 
+Think of this as the **robotics equivalent of a pilot's cockpit**. Instead of flying an airplane, you're monitoring everything your robot is seeing, thinking, and doing—all at the same time.
+
+Let's go through the tutorial in plain English.
+
+---
+
+# What is Foxglove?
+
+Imagine you're driving your car.
+
+Normally I only look out the windshield.
+
+Foxglove is like having all of these at once:
+
+* windshield camera
+* backup camera
+* dashboard gauges
+* GPS
+* engine diagnostics
+* speedometer
+* fuel gauge
+* tire pressure monitor
+
+All synchronized together.
+
+That is Foxglove for robots.
+
+Instead of only seeing the robot move in Gazebo or Isaac Sim...
+
+Foxglove lets you see **everything happening inside the robot's brain.**
+
+---
+
+# Step 1
+
+## Open an MCAP File
+
+The instructor loads an **MCAP** file.
+
+Think of an MCAP file as
+
+> A flight recorder.
+
+Exactly like the black box on an airplane.
+
+It records everything that happened.
+
+For example:
+
+* camera images
+* LiDAR scans
+* GPS
+* wheel speed
+* robot position
+* IMU
+* joint angles
+* battery
+* motor commands
+
+Later Foxglove plays it back.
+
+It is literally replaying the robot's life.
+
+---
+
+# Step 2
+
+## Topics
+
+On the left side is something called **Topics**.
+
+A topic is simply
+
+> one stream of information.
+
+Examples
+
+Camera topic
+
+```
+camera/image
+```
+
+LiDAR topic
+
+```
+scan
+```
+
+Robot position
+
+```
+odom
+```
+
+Velocity
+
+```
+cmd_vel
+```
+
+Battery
+
+```
+battery_state
+```
+
+Think of topics like television channels.
+
+Every channel broadcasts different information.
+
+Foxglove lets you tune into whichever channel you want.
+
+---
+
+# Step 3
+
+## Raw Message Panel
+
+The instructor opens a **Raw Message Panel.**
+
+This simply displays the numbers.
+
+Instead of pretty graphics...
+
+it literally shows
+
+```
+x = 1.54
+
+y = 0.82
+
+velocity = 0.33
+
+orientation = ...
+```
+
+Think of it like opening the robot's diary.
+
+Every measurement is written down.
+
+---
+
+# Step 4
+
+## The Timeline
+
+At the bottom is a time slider.
+
+Imagine watching a football replay.
+
+You can pause.
+
+Go backward.
+
+Go forward.
+
+Everything updates to that exact moment.
+
+Camera.
+
+LiDAR.
+
+Robot pose.
+
+Acceleration.
+
+Everything.
+
+Very useful when something goes wrong.
+
+---
+
+# Step 5
+
+## 3D Panel
+
+This is the coolest part.
+
+The instructor creates a **3D panel.**
+
+Instead of looking at numbers...
+
+Foxglove draws the robot in 3D.
+
+In your screenshot...
+
+You can see
+
+* robot body
+* wheels
+* LiDAR points
+
+all in one scene.
+
+That is exactly what my first screenshot shows.
+
+---
+
+# Step 6
+
+## URDF
+
+Then he loads the robot's **URDF.**
+
+URDF means
+
+**Unified Robot Description Format**
+
+This is basically
+
+> the robot's blueprint.
+
+It tells Foxglove
+
+"My robot has..."
+
+* four wheels
+* one laser
+* one camera
+* this body
+* these joints
+
+Without a URDF...
+
+Foxglove only knows there are numbers.
+
+With a URDF...
+
+Foxglove knows what the robot actually looks like.
+
+---
+
+# Step 7
+
+## LiDAR Points
+
+Then he turns on the LiDAR.
+
+Those green dots are laser measurements.
+
+Your first screenshot shows this perfectly.
+
+Imagine standing in a dark room.
+
+Instead of using your eyes...
+
+you shine a laser in every direction.
+
+Every time the beam hits something...
+
+you place a green dot there.
+
+Thousands of dots create a 3D picture.
+
+That picture is called a
+
+**Point Cloud.**
+
+---
+
+# What are the circles?
+
+Notice the rings around the robot.
+
+Those are LiDAR scans.
+
+The laser spins hundreds of times every second.
+
+Every rotation measures distance.
+
+Foxglove draws every measurement.
+
+That is how robots "see."
+
+---
+
+# Step 8
+
+## Base Link
+
+The instructor says
+
+> "Referenced to the body of my robot."
+
+This is extremely important.
+
+Imagine standing in the middle of your living room.
+
+Everything around you moves as you walk.
+
+From your point of view...
+
+YOU never move.
+
+The world moves around you.
+
+That is exactly what
+
+```
+base_link
+```
+
+means.
+
+The robot is always the center.
+
+Everything else moves around it.
+
+---
+
+# Step 9
+
+## Image Panel
+
+Now he opens the camera.
+
+Your second screenshot shows this.
+
+Upper left
+
+Camera image
+
+Lower left
+
+LiDAR
+
+Both are synchronized.
+
+That means
+
+when the camera sees a tree...
+
+the LiDAR also sees the same tree.
+
+Exactly the same instant.
+
+This is incredibly useful.
+
+---
+
+# Step 10
+
+## Plot Panel
+
+The graph on the lower right is a Plot.
+
+Instead of looking at pictures...
+
+it graphs numbers over time.
+
+In this example
+
+```
+Acceleration X
+```
+
+means
+
+How quickly the robot speeds up and slows down.
+
+Imagine driving over a pothole.
+
+The graph suddenly spikes.
+
+That spike tells you
+
+> the robot experienced a bump.
+
+---
+
+
+
+# Step 11
+
+## Synchronization
+
+This is probably the biggest feature.
+
+Everything happens together.
+
+Move the timeline...
+
+Everything changes.
+
+Camera.
+
+LiDAR.
+
+Graphs.
+
+Robot.
+
+Messages.
+
+All synchronized.
+
+It is like replaying security cameras from multiple angles at once.
+
+---
+
+# Looking at Your Screenshots
+
+## Screenshot 1
+
+I am looking at
+
+* 3D robot model
+* LiDAR point cloud
+* IMU sensor data
+* robot orientation
+* performance statistics
+
+This is mostly for understanding
+
+> Where is my robot?
+
+> What is it sensing?
+
+> Is everything updating correctly?
+
+---
+
+## Screenshot 2
+
+This is a more complete dashboard.
+
+Upper left
+
+Camera
+
+Lower left
+
+3D LiDAR
+
+Upper right
+
+IMU measurements
+
+Lower right
+
+Acceleration graph
+
+This is exactly how many robotics engineers debug real robots.
+
+## What I should remember from Tutorial #1
+
+By the end of this tutorial, I should understand these core ideas:
+
+* **Foxglove is a robotics dashboard** for visualizing and debugging robots.
+* An **MCAP file** is like a flight recorder that stores all of a robot's data.
+* **Topics** are individual streams of information (camera, LiDAR, battery, odometry, etc.).
+* The **3D panel** shows the robot and its environment.
+* A **URDF** gives Foxglove the robot's physical model so it can display it correctly.
+* **LiDAR point clouds** let you see what the robot is sensing in 3D.
+* The **Image panel** displays synchronized camera video.
+* The **Plot panel** graphs sensor values over time to reveal things like vibrations or sudden impacts.
+* The **timeline** keeps every sensor synchronized, making it easy to replay and diagnose robot behavior.
+
+For my ROS 2 and TIAGo work at Sonoma State, Foxglove will become one of my most valuable tools. As I start integrating navigation, MoveIt, cameras, you'll use Foxglove to verify that all of your sensors, robot state, and AI decisions are working together correctly.
+
+
 
