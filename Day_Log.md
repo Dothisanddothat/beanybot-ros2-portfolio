@@ -1549,6 +1549,299 @@ The key lesson is that **Foxglove is more than a viewer—it's an organized work
 * Troubleshoot using the Problems tab
 
 For your work with **ROS 2, TIAGo, Isaac Sim, learning these navigation tools will make debugging and analyzing robot behavior much faster as your projects become more complex.
+## FoxGlove Studios creating layouts:
+Excellent! Tutorial #3 is short, but it introduces one of the most useful features in Foxglove. As your BeanyBot robots become more advanced, **Layouts** will save you hours of work.
+
+Let's explain it in plain English.
+
+---
+
+# What is a Layout?
+
+Imagine you're sitting in the cockpit of an airplane.
+
+One pilot wants to see:
+
+* Altitude
+* Speed
+* Engine gauges
+
+Another pilot wants:
+
+* Weather radar
+* Navigation map
+* Fuel system
+
+Instead of moving all the instruments around every day...
+
+they save different **cockpit layouts**.
+
+That is exactly what a **Foxglove Layout** is.
+
+It is simply
+
+> **A saved dashboard.**
+
+---
+
+# What is inside a Layout?
+
+A layout remembers:
+
+* which panels are open
+* where the panels are
+* what topics each panel displays
+* panel sizes
+* panel settings
+
+Instead of rebuilding your dashboard every day...
+
+Foxglove remembers everything.
+
+---
+
+# Example
+
+Suppose today you're debugging TIAGo navigation.
+
+Your dashboard might look like:
+
+```
+Camera
+Map
+LiDAR
+Robot Model
+Velocity
+```
+
+Tomorrow you're debugging MoveIt.
+
+Now you want
+
+```
+Robot Arm
+Joint States
+Gripper
+Planning Scene
+Trajectory
+```
+
+Instead of rearranging everything...
+
+you simply load another layout.
+
+---
+
+# Why different teams need different layouts
+
+The instructor says:
+
+> Control engineers and perception engineers need different layouts.
+
+Let's explain.
+
+Imagine BeanyBot has three engineers.
+
+---
+
+## Navigation Engineer
+
+This engineer only cares about driving.
+
+Their layout might include:
+
+* Map
+* LiDAR
+* GPS
+* Robot Position
+* Velocity
+
+Nothing else.
+
+---
+
+## AI / Vision Engineer
+
+This engineer doesn't care about wheels.
+
+They want:
+
+* RGB Camera
+* Depth Camera
+* Cocoa Pod Detector
+* Confidence Scores
+* Bounding Boxes
+
+---
+
+## Robot Arm Engineer
+
+This engineer only wants:
+
+* Joint Angles
+* End Effector
+* MoveIt Planning
+* Wrist Camera
+* Gripper Status
+
+Completely different dashboard.
+
+---
+
+# The Blue Dot
+
+The instructor points out the **blue dot**.
+
+What does it mean?
+
+Imagine Microsoft Word.
+
+You type one letter.
+
+Suddenly:
+
+```
+Document*
+```
+
+appears.
+
+The * means
+
+"You have unsaved changes."
+
+Foxglove's blue dot means exactly the same thing.
+
+You changed something.
+
+It hasn't been saved yet.
+
+---
+
+# Reverting Changes
+
+Suppose you accidentally move panels around.
+
+Instead of rebuilding everything...
+
+Foxglove lets you restore the last saved layout.
+
+Very handy.
+
+---
+
+# Sharing Layouts
+
+This is one of Foxglove's most powerful features.
+
+Suppose my entire BeanyBot engineering team is debugging the same robot.
+
+I can build the perfect dashboard.
+
+Instead of telling everyone
+
+> Put this panel here...
+> Move this over there...
+> Resize this...
+
+I simply save it.
+
+Everyone opens the same layout.
+
+Instantly everyone's dashboard looks identical.
+
+---
+
+# Organization Layouts
+
+Foxglove lets me save layouts for
+
+Everyone
+
+or
+
+Only myself.
+
+Think of it like Google Drive.
+
+Personal folder
+
+Only you can see it.
+
+Shared folder
+
+Everyone on your team can use it.
+
+
+# Creating a New Layout
+
+The instructor demonstrates:
+
+```
+Layouts
+
+↓
+
+Manage Layouts
+
+↓
+
+Add
+
+↓
+
+New Layout
+
+↓
+
+Give it a name
+```
+
+That's all there is to it.
+
+---
+
+# How I Will Use Layouts?
+
+Once I begin integrating ROS 2, MoveIt, Nav2, Isaac Sim, and real robots, I'll probably create layouts such as:
+
+### TIAGo Navigation
+
+* Map
+* LiDAR
+* Camera
+* Velocity
+* Robot Model
+
+---
+
+### TIAGo Manipulation
+
+* MoveIt Planning Scene
+* Joint States
+* Gripper
+* Wrist Camera
+* End Effector
+
+---
+
+
+### Diagnostics
+
+* CPU Usage
+* Memory
+* Network
+* ROS Logs
+* Errors
+
+Instead of constantly rearranging panels, you can switch between these layouts with a click.
+
+---
+
+## What I should remember from Tutorial #3
+
+A **Layout** is simply a **saved Foxglove dashboard**. It remembers the arrangement of my panels, the topics being displayed, and your visualization settings. Different robotics tasks—and different engineers—need different layouts, so Foxglove lets me save and switch between them quickly. As my BeanyBot project grows from simulation to real robots, using well-organized layouts will make debugging, testing, and collaboration much more efficient.
+
 ## Issac Sim: Understanding the Pick-and-Place State Machine: 
 
 
