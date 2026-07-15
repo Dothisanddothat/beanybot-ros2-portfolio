@@ -523,4 +523,39 @@ During testing I encountered launch file and TF broadcaster issues that prevente
 Today's session reinforced how important package configuration, launch files, and executable registration are in ROS 2. Even though the final demo did not complete, I gained a much deeper understanding of the ROS 2 package structure and the debugging process.
 
 Tomorrow I'll continue with a fresh tutorial and keep moving toward the larger goal of autonomous agricultural robotics for BeanyBot.
-## Day_Log Thursday July 9 2026:
+## Day_Log Wednesday July 15 2026:
+
+Isaac Sim 5.1 – Franka Pick-and-Place Tutorial (Part 2)
+
+Today I completed a detailed study of the complete execution flow of NVIDIA Isaac Sim's Franka Pick-and-Place example. Rather than simply running the example, I analyzed every major section of the source code to understand how the simulator, physics engine, and controller work together to execute an autonomous manipulation task.
+
+Topics Studied
+Physics simulation initialization using SimulationManager.setup_simulation()
+Physics timestep (dt = 1/60) and why 60 Hz is commonly used for robotics simulations
+Retrieving the active physics scene with SimulationManager.get_physics_scenes()
+CPU versus GPU dynamics and the purpose of set_enabled_gpu_dynamics(False)
+Starting the simulation with app_utils.play()
+Initializing robot articulations before controller startup using app_utils.update_app(steps=20)
+Resetting the Franka Pick-and-Place controller
+Understanding the controller state machine
+Computing max_test_steps using controller.events_dt
+Studying the complete simulation loop using:
+simulation_app.update()
+controller.forward()
+controller.is_done()
+app_utils.pause()
+Understanding automated testing safeguards using RuntimeError
+Proper simulation shutdown using:
+app_utils.stop()
+simulation_app.close()
+Concepts Learned
+
+Today's lesson reinforced several fundamental robotics concepts:
+
+Physics engines advance one frame at a time.
+Robot controllers operate as state machines rather than issuing one large motion command.
+Every simulation frame updates robot joints, collisions, sensors, and controller outputs.
+Initialization order is important to ensure articulations and physics tensors are valid before control begins.
+Good robotics software includes timeout protection and graceful shutdown procedures.
+
+
