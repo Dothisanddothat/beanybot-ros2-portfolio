@@ -2808,5 +2808,213 @@ they use a maximum number of steps because:
 
 This is standard practice in robotics.
 
+Absolutely, Selwyn. Based on today's Isaac Sim lessons, here's a professional **GitHub Day Log** followed by a **LinkedIn post**.
+
 ---
+
+# GitHub Day Log – July 20, 2026
+
+## Day XX – Isaac Sim Core API Tutorial: Franka Pick-and-Place State Machine
+
+### Objectives
+
+* Continue learning NVIDIA Isaac Sim Core API tutorials.
+* Understand the architecture of the `FrankaPickPlace` controller.
+* Learn how a robotics state machine executes a complete pick-and-place task.
+* Compare Isaac Sim manipulation with MoveIt 2 motion planning.
+
+---
+
+## Topics Studied
+
+### Main Simulation Loop
+
+Learned how Isaac Sim continuously executes physics updates using:
+
+```python
+while simulation_app.is_running():
+```
+
+This loop keeps the simulation alive until the application closes.
+
+---
+
+### Updating the Simulation
+
+Studied:
+
+```python
+simulation_app.update()
+```
+
+This advances the simulator one physics frame by:
+
+* Updating physics
+* Rendering graphics
+* Processing sensors
+* Refreshing the UI
+
+---
+
+### Frame Counter
+
+Learned the purpose of:
+
+```python
+step_count += 1
+```
+
+This counts simulation frames and is used for:
+
+* timing
+* controller execution
+* automated testing
+* timeout detection
+
+---
+
+### Play State
+
+Studied:
+
+```python
+if app_utils.is_playing():
+```
+
+The controller only executes while the simulation is actively running.
+
+---
+
+### Controller Completion
+
+Learned:
+
+```python
+if not controller.is_done():
+```
+
+The controller continues executing until every phase of the pick-and-place operation has completed.
+
+---
+
+### Controller Forward Method
+
+Studied:
+
+```python
+controller.forward()
+```
+
+This computes the next robot action every physics frame.
+
+The robot does not instantly jump to the goal—it gradually progresses through each phase of the task.
+
+---
+
+### Pick-and-Place State Machine
+
+Studied NVIDIA's seven-state manipulation controller.
+
+1. Move above cube
+2. Approach cube
+3. Close gripper
+4. Lift cube
+5. Move to target
+6. Open gripper
+7. Move away
+
+This demonstrated how complex robot behavior can be decomposed into sequential states.
+
+---
+
+### Customizing Controller Timing
+
+Learned how to modify phase durations using:
+
+```python
+events_dt=[80,60,30,60,100,30,30]
+```
+
+Changing these values adjusts how long the robot spends in each phase without modifying the controller logic.
+
+---
+
+### Scene Customization
+
+Studied:
+
+```python
+controller.setup_scene(...)
+```
+
+Configured:
+
+* cube initial position
+* cube dimensions
+* target placement location
+
+This illustrates parameterized simulation design.
+
+---
+
+### Robotics Insight
+
+One of today's biggest lessons was understanding the distinction between **MoveIt 2** and **Isaac Sim**.
+
+MoveIt 2 is responsible for:
+
+* motion planning
+* inverse kinematics
+* collision-free trajectories
+
+Isaac Sim provides:
+
+* physics simulation
+* contact dynamics
+* gravity
+* grasp interaction
+* object manipulation
+
+Together they form complementary parts of a complete robotics software stack.
+
+---
+
+
+
+This software architecture can later be integrated with ROS 2, MoveIt 2, Isaac Sim, and eventually physical robotic hardware.
+
+---
+
+## Hours
+
+Approximate study time:
+**2.5–3 hours**
+
+---
+
+# LinkedIn Post
+
+**Today's robotics lesson focused on one of the most fundamental concepts in robotic manipulation: state machines.**
+
+I continued working through NVIDIA Isaac Sim's Core API tutorials and studied how the **Franka Pick-and-Place controller** performs an autonomous manipulation task.
+
+Rather than commanding every joint individually, the controller progresses through a sequence of well-defined phases:
+
+• Move above the object
+• Approach
+• Grasp
+• Lift
+• Transport
+• Release
+• Move away safely
+
+I also learned how these phases can be customized using controller parameters such as `events_dt`, allowing the robot's behavior to be tuned without changing the controller's underlying logic.
+
+Another valuable lesson was understanding the difference between **MoveIt 2** and **Isaac Sim**. MoveIt 2 plans safe, collision-free robot motions, while Isaac Sim provides the physics simulation that models contact, gravity, and object interaction. Together, they form complementary components of a modern robotic manipulation pipeline.
+
+
+Every tutorial brings another piece of the robotics puzzle together.
+
+#Robotics #IsaacSim #NVIDIA #ROS2 #MoveIt2 #Python #Automation #AgriculturalRobotics #Simulation #BeanyBot #Engineering #STEM
+
 
