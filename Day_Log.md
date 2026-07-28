@@ -3016,5 +3016,2108 @@ Another valuable lesson was understanding the difference between **MoveIt 2** an
 Every tutorial brings another piece of the robotics puzzle together.
 
 #Robotics #IsaacSim #NVIDIA #ROS2 #MoveIt2 #Python #Automation #AgriculturalRobotics #Simulation #BeanyBot #Engineering #STEM
+## This code is part of a **state machine**. The variable `self._pick_phase` keeps track of which step of the pick-and-place operation the robot is currently performing.
+ChatGPT Plus
+
+
+
+
+
+This section takes the cube you just created and makes it behave like a real physical object. Then it loads the Franka Panda robotic arm into the scene.
+
+Without these lines:
+
+the cube would not collide with anything,
+
+it would not move when pushed,
+
+and the Franka robot would not exist in the simulation.
+
+Let's go through it line by line.
+
+Closing Parenthesis
+)
+This finishes creating the cube.
+
+At this point, the cube exists visually, but it is just a shape.
+
+Line 1
+GeomPrim(paths=cube_shape.paths, apply_collision_apis=True)
+What is GeomPrim?
+A GeomPrim (Geometric Primitive) represents the cube's geometric shape.
+
+Think of it as defining:
+
+the cube's surfaces
+
+its dimensions
+
+its visible geometry
+
+paths=cube_shape.paths
+Earlier you created:
+
+cube_shape = Cube(...)
+This cube lives at
+
+/World/Cube
+So
+
+cube_shape.paths
+returns something similar to:
+
+/World/Cube
+Now GeomPrim knows which object you're modifying.
+
+apply_collision_apis=True
+This is the important part.
+
+It tells Isaac Sim:
+
+"This object should participate in collisions."
+
+Without collisions:
+
+the Jetbot would drive through the cube
+
+the Franka gripper would pass through it
+
+gravity might ignore it
+
+With collisions enabled:
+
+robots can push it
+
+the gripper can touch it
+
+the floor can stop it from falling through
+
+Real-world analogy
+Imagine a cardboard box.
+
+If collision is disabled:
+
+👻 It behaves like a ghost.
+
+You can walk right through it.
+
+If collision is enabled:
+
+📦 It behaves like a real box.
+
+You bump into it.
+
+Line 2
+RigidPrim(paths=cube_shape.paths)
+This makes the cube a rigid body.
+
+What is a rigid body?
+A rigid body follows the laws of physics.
+
+It can:
+
+fall
+
+slide
+
+roll
+
+collide
+
+be pushed
+
+have mass
+
+Without RigidPrim, the cube would simply sit in space like scenery.
+
+With RigidPrim
+The cube now responds to:
+
+gravity
+
+forces
+
+collisions
+
+momentum
+
+Now the Jetbot can push it.
+
+Real-world analogy
+Imagine placing a wooden block on the floor.
+
+If you kick it:
+
+➡️ It slides.
+
+That's what RigidPrim makes possible.
+
+Line 3
+cube_shape.apply_visual_materials(visual_material)
+Earlier you created:
+
+visual_material
+which was bright red.
+
+Now you're telling Isaac Sim:
+
+"Paint this cube using that material."
+
+Before:
+
+⬜ White cube
+
+After:
+
+🟥 Red cube
+
+Only the appearance changes.
+
+Its physics remain exactly the same.
+
+What has happened so far?
+Your cube now has:
+
+✅ Geometry
+
+✅ Collision
+
+✅ Physics
+
+✅ Red appearance
+
+It is now a complete physical object.
+
+Comment
+# Add Franka manipulator at a position the Jetbot will push the cube to
+This explains the next step.
+
+The Jetbot's job is:
+
+Push Cube
+The Franka's job is:
+
+Receive Cube
+
+↓
+
+Pick it up
+This demonstrates cooperation between a mobile robot and a robotic arm.
+
+Line 4
+stage_utils.add_reference_to_stage(
+You've seen this before.
+
+It means:
+
+"Load another USD file into the Stage."
+
+Previously you loaded:
+
+Ground
+
+Jetbot
+
+Now you're loading:
+
+Franka Panda
+
+Line 5
+usd_path=assets_root_path +
+"/Isaac/Robots/FrankaRobotics/FrankaPanda/franka.usd",
+This points to the Franka Panda robot description.
+
+Inside that USD file are:
+
+seven robot arm joints
+
+the gripper
+
+links
+
+collision models
+
+physics
+
+visual meshes
+
+Instead of building the robot manually, Isaac Sim loads everything automatically.
+
+What is the Franka Panda?
+The Franka Panda is a 7-degree-of-freedom robotic manipulator.
+
+It has:
+
+shoulder
+
+elbow
+
+wrist
+
+parallel gripper
+
+It is commonly used for:
+
+pick-and-place
+
+assembly
+
+research
+
+AI robotics
+
+A simplified view looks like this:
+
+      Gripper
+         ||
+         ||
+       __||__
+      /
+     /
+    /
+   /
+Base
+Line 6
+path="/World/Franka",
+This tells Isaac Sim where to place the robot in the Stage.
+
+The Stage now becomes:
+
+World
+│
+├── ground
+├── Jetbot
+├── Cube
+├── Franka
+└── Materials
+Later the program can access the robot by referring to:
+
+"/World/Franka"
+Closing Parenthesis
+)
+The Franka robot is now loaded into the simulation.
+
+What the completed scene looks like
+                 Franka Arm
+                     🤖
+                     │
+                     │
+                🟥 Cube
+                     ▲
+                     │
+                 Jetbot
+
+=================================
+            Ground
+The intended workflow is:
+
+The Jetbot drives toward the cube.
+
+The Jetbot pushes the cube across the floor.
+
+The cube moves because it has collision detection and rigid-body physics.
+
+The Franka robot waits where the cube is delivered.
+
+The Franka can then grasp or manipulate the cube.
+
+Execution flow
+Cube created
+      │
+      ▼
+Enable collisions
+      │
+      ▼
+Enable rigid-body physics
+      │
+      ▼
+Paint cube red
+      │
+      ▼
+Load Franka robot
+      │
+      ▼
+Scene now contains:
+
+Ground
+Jetbot
+Cube
+Franka
+Why this matters for BeanyBot
+This example demonstrates a common robotics pattern: one robot transports an object, and another robot manipulates it. For BeanyBot, the same concepts could be adapted to agricultural tasks. A mobile robot might carry harvested cocoa pods to a collection point, while a robotic arm sorts or loads them. The same building blocks—collision-enabled objects, rigid-body physics, and articulated robots loaded from USD files—will be used when you create more advanced farm simulations.
+
+
+ # Position Franka so the cube will be pushed into its workspace
+        franka_xform = XformPrim("/World/Franka")
+        franka_xform.set_world_poses(positions=np.array([[0.8, -0.5, 0.0]]))
+
+    # -- End of setup_scene -- #
+
+This is the last part of setup_scene(). The Franka robot has already been loaded into the simulation. Now you're moving it to a specific location so it can interact with the cube after the Jetbot pushes it.
+
+Let's go through it line by line.
+
+Comment
+# Position Franka so the cube will be pushed into its workspace
+This comment explains the goal.
+
+The Franka robot is not being placed randomly.
+
+It is being positioned so that:
+
+The Jetbot pushes the cube.
+
+The cube arrives near the Franka.
+
+The Franka can reach the cube with its arm.
+
+This creates a simple cooperative robotics scenario.
+
+Line 1
+franka_xform = XformPrim("/World/Franka")
+What is XformPrim?
+XformPrim stands for Transform Primitive.
+
+A transform controls an object's:
+
+Position
+
+Rotation
+
+Scale
+
+Think of it as the robot's "location manager."
+
+Earlier, you loaded the Franka robot:
+
+stage_utils.add_reference_to_stage(...)
+That created the robot.
+
+Now:
+
+XformPrim("/World/Franka")
+creates an object that lets you move that robot.
+
+"/World/Franka"
+This tells Isaac Sim exactly which object you're controlling.
+
+In the Stage:
+
+World
+│
+├── ground
+├── Jetbot
+├── Cube
+└── Franka
+You're saying:
+
+"Give me control over the transform of /World/Franka."
+
+The result is stored in the variable:
+
+franka_xform
+Line 2
+franka_xform.set_world_poses(
+    positions=np.array([[0.8, -0.5, 0.0]])
+)
+This actually moves the robot.
+
+set_world_poses()
+This function sets an object's position in the world coordinate system.
+
+Think of it as saying:
+
+"Move the Franka robot to these coordinates."
+
+positions=np.array(...)
+The coordinates are:
+
+X = 0.8
+Y = -0.5
+Z = 0.0
+Let's interpret each one.
+
+X = 0.8
+0.8 meters
+The Franka is placed 80 cm forward from the world's origin.
+
+Y = -0.5
+-0.5 meters
+The robot is shifted 50 cm to one side (negative Y direction).
+
+This prevents it from sitting directly in front of the Jetbot and gives it a reachable workspace beside the cube's expected path.
+
+Z = 0.0
+0.0 meters
+The base of the Franka sits on the ground.
+
+Why move the Franka?
+Suppose the robot stayed at the world's origin.
+
+The Jetbot might collide with it before reaching the cube.
+
+Instead, the scene is arranged so that:
+
+the Jetbot has room to drive,
+
+the cube can be pushed safely,
+
+and the Franka can reach the cube without blocking the Jetbot.
+
+Top-down view (simplified)
+              Franka
+                 🤖
+                /
+               /
+              /
+
+Jetbot ---> 🟥 Cube
+The Jetbot pushes the cube toward the Franka's workspace.
+
+Why use NumPy?
+np.array([[0.8, -0.5, 0.0]])
+Isaac Sim often expects positions as arrays because it can move multiple objects at once.
+
+For a single object, the outer brackets still follow that expected format.
+
+Comment
+# -- End of setup_scene -- #
+This marks the end of the setup_scene() method.
+
+At this point, the virtual world has been completely assembled.
+
+What exists in the scene now?
+The Stage contains:
+
+World
+│
+├── Ground
+├── Jetbot
+├── Cube
+├── Franka
+└── Materials
+      └── Red
+And each object has been configured:
+
+Ground provides a floor.
+
+Jetbot is ready to drive.
+
+Cube has collision, rigid-body physics, and a red material.
+
+Franka has been positioned where it can reach the cube.
+
+Overall setup flow
+Create Stage
+      │
+      ▼
+Add Ground
+      │
+      ▼
+Add Jetbot
+      │
+      ▼
+Create Red Cube
+      │
+      ▼
+Enable Cube Physics
+      │
+      ▼
+Load Franka
+      │
+      ▼
+Move Franka to (0.8, -0.5, 0.0)
+      │
+      ▼
+Scene ready for simulation
+Why this matters for BeanyBot
+This example demonstrates an important robotics principle: careful placement of robots and objects within a shared workspace. In a future BeanyBot simulation, you might position a mobile robot so it delivers harvested cocoa pods into the working area of a robotic arm or collection station. The same technique—using an XformPrim and set_world_poses()—allows you to place robots, baskets, trees, charging stations, or other equipment precisely where they need to be in your simulated cocoa farm.
+
+
+Wednesday 3:49 PM
+Screenshot 2026-07-22 at 3.40.53 PM.png
+Screenshot 2026-07-22 at 3.47.08 PM.png
+Screenshot 2026-07-22 at 3.47.15 PM.png
+Screenshot 2026-07-22 at 3.47.21 PM.png
+Val, here is the response from the mentor. I can work on my own project because Keto doesn't seem to have the time to work with me. He keeps saying he is too busy, but all I ever see him do is play online games. So, back to the present, how about I have Tiago, in a simulated walk to a room through people, desks, items lying on the ground, and perhaps through a dedicated path, go to the professor and pick up a can of Sprite from the professor's desk and carry it away? here was the old research paper tasks: "Physically Safe Autonomous Navigation Around Humans: A TIAGo Case Study
+
+                                        Abstract
+
+This paper describes a simulation in which a PAL Robotics TIAGo robot autonomously traveled from Room 1 to Room 3 while avoiding stationary human figures placed along its route. The simulation was completed in Gazebo using ROS 2 Humble, Nav2, AMCL, and RViz2. TIAGo reached the goal without colliding with the human models and without using any Nav2 recovery behaviors. The robot did not recognize the models as people. It detected them as physical obstacles and used the Nav2 costmaps to plan a safe route around them. This demonstration focuses on physical safety only. It does not show social navigation behaviors such as respecting personal space, predicting human movement, yielding, or understanding human intent.
+
+Index Terms— autonomous navigation, human-robot interaction, Nav2, ROS 2, TIAGo, obstacle avoidance.
+
+I. Introduction
+
+A robot working around people must be able to move safely without hitting anyone. However, avoiding a collision is not the same as understanding people or following social rules.
+
+Kruse et al. explain that human-aware navigation includes both physical safety and social behavior [1]. A robot may avoid contact with a person but still move too close, approach from an uncomfortable direction, or behave in a way that is difficult for the person to understand.
+
+The purpose of this demonstration was to test the physical part of human-robot interaction. I wanted to see whether a simulated TIAGo robot could travel through several rooms while avoiding human figures placed in its path.
+
+The demonstration did not include person recognition, facial recognition, human intent prediction, or social decision-making. TIAGo treated the human figures as obstacles in the same way it would treat a wall, chair, table, or box.
+
+II. System Setup
+
+The demonstration used a simulated PAL Robotics TIAGo mobile manipulator in Gazebo. The software environment was ROS 2 Humble.
+
+Nav2 controlled TIAGo’s autonomous navigation. AMCL was used to localize the robot on a known map. RViz2 was used to view the map, costmaps, robot position, planned path, and navigation status.
+
+The simulation environment contained several connected rooms. TIAGo started in Room 1 and was given a navigation goal in Room 3.
+
+Four stationary human models were placed in the environment. One figure was located near the starting room, two figures were placed close together along the route, and another figure was positioned separately farther ahead.
+
+The human figures were placed where they would interfere with a direct route to the destination. This required Nav2 to plan a path around them.
+
+III. Method
+
+TIAGo was first spawned in Room 1. AMCL was activated so that the robot could estimate its position on the map.
+
+After localization was established, the human models were inserted into the Gazebo world. At least one model was placed directly in the path TIAGo would normally use to travel toward Room 3.
+
+I then used the RViz2 2D Goal Pose tool to select the destination. Nav2 calculated the route and controlled the robot during the entire trip.
+
+No keyboard teleoperation was used to guide TIAGo around the figures. Once the goal was issued, the robot completed the task autonomously.
+
+The simulation was recorded from start to finish. I observed whether TIAGo changed its route, avoided the human figures, reached the destination, or activated any recovery behaviors.
+
+IV. How the Avoidance Worked
+
+TIAGo avoided the human figures through standard Nav2 obstacle detection and path planning.
+
+The robot’s simulated sensors detected objects in the environment. When the sensors detected a human model, Nav2 did not identify it as a person. The model simply appeared as an occupied area.
+
+Nav2 uses costmaps to represent the environment [2]. The obstacle layer marks areas where the robot’s sensors detect a physical object. The inflation layer then places additional cost around that obstacle.
+
+The inflated area creates a safety buffer. The cells closest to the obstacle have the highest cost, while cells farther away have lower cost.
+
+The global planner uses this information when calculating a path to the goal. A route that passes through an occupied area is rejected. A route that passes very close to an obstacle may also have a higher cost than a route with more clearance.
+
+The local controller continues checking the nearby costmap while TIAGo is moving. This allows the robot to adjust its movement based on current sensor information.
+
+In this demonstration, the two human figures standing close together created overlapping inflated areas. Nav2 treated the pair as one larger obstacle region. TIAGo moved around the outside instead of attempting to travel between them.
+
+The separately positioned figure created a smaller independent obstacle region. TIAGo made a smaller route adjustment when passing that figure.
+
+The size of each detour depended on the size and location of the inflated costmap area. It did not depend on any social understanding of the people.
+
+V. Results
+
+TIAGo successfully traveled from Room 1 to Room 3.
+
+At the start of the test, the planned route curved away from the person near the starting location. This showed that the obstacle and inflation layers were affecting the route before TIAGo began moving.
+
+As the robot entered the corridor, the path continued to bend around occupied areas. TIAGo followed the planned route without contacting the human figures or the walls.
+
+The largest detour occurred near the two people standing close together. Their inflation regions overlapped, creating one larger high-cost area. TIAGo moved around the outside of that area rather than passing between them.
+
+The robot made a smaller adjustment around the person who was standing separately.
+
+TIAGo reached the destination successfully. No collisions were observed during the test.
+
+The Nav2 recovery counter remained at zero. The robot did not need to spin in place, back up, clear the costmaps, or use another recovery behavior.
+
+The task was completed through normal Nav2 planning and obstacle avoidance.
+
+VI. Physical Safety and Social Navigation
+
+This demonstration showed basic physical safety. TIAGo detected obstacles and avoided making contact with them.
+
+It did not demonstrate full social navigation.
+
+A socially aware robot would need to recognize that an obstacle is a person and respond differently than it would to furniture or a wall.
+
+For example, a robot may need to leave more personal space around a person than the minimum distance needed to prevent a collision. It may also need to slow down, yield, avoid moving between people, or approach from a direction that feels less threatening.
+
+The robot may also need to move in a way that makes its intentions clear. A person should be able to understand where the robot is going and whether it plans to stop, turn, or pass.
+
+None of those behaviors were included in this simulation. The human models were treated as stationary geometric obstacles.
+
+For that reason, the result should be described as physically safe navigation around humans, not complete human-aware or socially aware navigation.
+
+VII. Limitations and Future Work
+
+The main limitation is that the human models did not move. The simulation therefore did not test what would happen if a person suddenly walked across TIAGo’s path.
+
+The robot also did not classify the obstacles as people. All detected objects received the same basic costmap treatment.
+
+The test used only one environment and one arrangement of human figures. More trials would be needed to test different room layouts, corridor widths, robot speeds, and numbers of people.
+
+Simulation also does not include every problem that may occur with a physical robot. Real sensors may experience noise, blind spots, communication delays, or inaccurate readings.
+
+A future version of the project could include walking human models. Person detection could also be added so that people receive a larger safety area than ordinary objects.
+
+Another improvement would be a custom Nav2 costmap layer that creates different safety zones around people depending on their position and facing direction. TIAGo could also reduce its speed when moving near a person.
+
+These changes would move the project beyond basic collision avoidance and closer to the human-aware navigation methods discussed by Kruse et al. [1].
+
+VIII. Conclusion
+
+This case study demonstrated that a simulated TIAGo robot could autonomously navigate from Room 1 to Room 3 while avoiding four stationary human figures.
+
+The robot reached the destination without collision and without using Nav2 recovery behaviors.
+
+The avoidance was produced by standard geometric obstacle detection. TIAGo’s sensors detected the models, the Nav2 costmaps marked their locations, and the planner selected a route around the inflated obstacle areas.
+
+The demonstration supports a limited but important conclusion: TIAGo can use Nav2 to maintain basic physical safety around stationary people in a simulated indoor environment.
+
+The robot did not understand that the obstacles were human, predict their behavior, or follow social rules. Those abilities remain future work.
+
+References
+
+[1] T. Kruse, A. K. Pandey, R. Alami, and A. Kirsch, “Human-aware robot navigation: A survey,” Robotics and Autonomous Systems, vol. 61, no. 12, pp. 1726–1743, Dec. 2013.
+
+[2] Open Navigation LLC, “Nav2 Costmap 2D,” Navigation 2 Documentation. [Online]. Available: https://docs.nav2.org. Accessed: Jul. 2026." Val, she says the deadline was changed to the 3 of Aug but, I still see the same July 24, 2026 deadline?
+
+ 
+
+
+I can definitely review that video, but I can't open a Google Drive link directly from chat.
+
+Please do one of these:
+
+Upload the video directly into this chat (preferred), or
+
+Download it from Google Drive and drag the .mp4 or .mov file into this conversation.
+
+Once I have the video, I'll analyze it frame by frame and tell you:
+
+✅ Whether the Nav2 navigation is working correctly.
+
+✅ Whether TIAGo is avoiding people and obstacles properly.
+
+✅ Whether the path planning in RViz looks correct.
+
+✅ Whether the arm is positioned correctly for grasping.
+
+✅ Exactly why the grasp succeeds or fails.
+
+✅ What needs to change before your mentor arrives tomorrow.
+
+Tomorrow's plan
+I know your mentor is making a surprise visit to check your progress. Based on what she told you, I would focus on producing one polished demonstration instead of several incomplete ones.
+
+The target demonstration should be:
+
+Part 1
+Room 1
+      ↓
+Autonomous navigation with Nav2
+      ↓
+Avoid people
+      ↓
+Avoid desks
+      ↓
+Reach Room 3
+Then:
+
+Part 2
+Arrive at professor's desk
+      ↓
+Move arm with MoveIt
+      ↓
+Open gripper
+      ↓
+Grasp Sprite can
+      ↓
+Lift can
+      ↓
+Carry can away
+If we can get that working in Gazebo, it naturally strengthens your paper because it demonstrates both autonomous navigation and mobile manipulation.
+
+I'm ready to help tomorrow morning starting at 8:00 AM Pacific. While I can't stay continuously connected between messages, every time you send me screenshots, terminal output, code, or videos, I'll help you troubleshoot the next step as quickly and methodically as possible. I think we have a realistic chance of making substantial progress before your mentor arrives.
+
+
+
+IMG_9882.mov
+File
+
+Worked for 25s
+Selwyn, I watched your video, and I have to say this is a solid foundation. It demonstrates exactly what your current paper claims.
+
+Here's what I observed:
+
+✅ What worked well
+Gazebo simulation remained stable throughout the run.
+
+RViz displayed the map and planned path while TIAGo was navigating.
+
+TIAGo autonomously followed the planned route—this did not look like manual teleoperation.
+
+The robot navigated around the environment instead of driving straight through obstacles.
+
+The simulation completed without any obvious crashes or resets.
+
+This supports the central claim of your current paper:
+
+TIAGo autonomously navigated from one room to another using Nav2 while avoiding obstacles.
+
+What would make the video even stronger
+Before your mentor arrives, if possible:
+
+Start recording a few seconds earlier so viewers can clearly see TIAGo in Room 1 before the goal is sent.
+
+Zoom or pan briefly to RViz so the planned path and costmaps are easier to see.
+
+At the end, pause for a few seconds after TIAGo reaches the goal so it's obvious the task is complete.
+
+These are presentation improvements—they don't require changing the robotics.
+
+Tomorrow's second demonstration
+The manipulation video should have the same style:
+
+Start:
+TIAGo beside professor's desk
+
+↓
+
+MoveIt plans arm motion
+
+↓
+
+Gripper opens
+
+↓
+
+Arm moves over Sprite can
+
+↓
+
+Gripper closes
+
+↓
+
+Can lifts from table
+
+↓
+
+TIAGo backs away with can
+If you capture that successfully, you'll have two complementary demonstrations:
+
+Video 1: Autonomous navigation.
+
+Video 2: Autonomous mobile manipulation.
+
+Together, they tell a much richer robotics story than navigation alone.
+
+My assessment
+Based on the navigation video you uploaded, I think you're past the "does Nav2 work?" stage. Your remaining challenge is integrating the manipulation task with MoveIt and the gripper.
+
+Tomorrow morning, I'd spend nearly all of your effort on getting one successful grasp and lift of the Sprite can. If that works, updating the paper is much easier because you can extend the existing results instead of rewriting everything.
+
+I think your mentor will be much more interested in seeing a simulation that navigates and manipulates than in hearing about planned features. If you can show both behaviors in Gazebo, you'll have a compelling demonstration to accompany the paper. Good luck tomorrow morning—I'm ready to help you troubleshoot each step as you go.
+
+
+it is not impossible to pick up the can is it with Moveit2?
+
+No. It is absolutely not impossible.
+
+In fact, picking up objects is one of the primary purposes of MoveIt 2.
+
+MoveIt 2 is used every day to:
+
+✅ Pick up cubes
+
+✅ Pick up cans
+
+✅ Pick up bottles
+
+✅ Pick up tools
+
+✅ Pick up boxes
+
+✅ Pick up laboratory objects
+
+A Sprite can is a very reasonable object for a mobile manipulator like TIAGo.
+
+What MoveIt 2 actually does
+MoveIt 2 is responsible for planning the arm motion:
+
+Current arm position
+        ↓
+Plan collision-free motion
+        ↓
+Move above can
+        ↓
+Lower to grasp position
+        ↓
+Close gripper
+        ↓
+Lift object
+The difficult part is usually not MoveIt itself. It's making sure everything else is configured correctly.
+
+Typical reasons a grasp fails include:
+
+The arm isn't centered over the can.
+
+The wrist orientation is incorrect.
+
+The gripper closes too early or too late.
+
+The can's collision geometry doesn't match its visual model.
+
+The can isn't configured as a movable physics object in Gazebo.
+
+The fingers don't generate enough friction or force to hold the can.
+
+The object isn't attached to the robot after the grasp (depending on how the simulation is implemented).
+
+None of those mean the task is impossible—they're engineering issues that can be diagnosed and fixed.
+
+Why I'm optimistic
+You already have the hardest part working:
+
+✅ Gazebo
+
+✅ ROS 2
+
+✅ Nav2
+
+✅ AMCL
+
+✅ RViz
+
+✅ TIAGo navigation
+
+Adding manipulation is building on that foundation.
+
+Tomorrow
+I don't want us to guess.
+
+We'll go through it methodically:
+
+Can MoveIt plan to a pose above the can?
+
+Does the arm execute that plan?
+
+Is the gripper centered on the can?
+
+Does the gripper close?
+
+Does the can lift?
+
+As soon as one step fails, we'll know exactly what to fix.
+
+I think this is a realistic goal for tomorrow morning. It's challenging, but it's a standard capability for a simulated TIAGo using MoveIt 2, and we'll focus on identifying the specific obstacle rather than assuming the whole task can't be done.
+
+
+```python
+elif self._pick_phase == 3:
+    # Lift cube (wait 100 steps)
+```
+
+Here's what each part means:
+
+* **`elif`** = "else if." It checks another condition only if the previous `if` or `elif` conditions were false.
+* **`self._pick_phase`** = A variable that stores the robot's current phase of the task.
+* **`== 3`** = Checks whether the robot is currently in **Phase 3**.
+* **`# Lift cube (wait 100 steps)`** = A comment for humans. Python ignores comments. It tells you that Phase 3 is responsible for lifting the cube and remaining in that phase for about **100 simulation steps**.
+
+### Typical Pick-and-Place Sequence
+
+Many Isaac Sim examples use a sequence similar to this:
+
+| Phase | What the robot does                 |
+| ----: | ----------------------------------- |
+|     0 | Move above the cube                 |
+|     1 | Lower the gripper toward the cube   |
+|     2 | Close the gripper to grasp the cube |
+| **3** | **Lift the cube upward**            |
+|     4 | Move toward the destination         |
+|     5 | Lower the cube                      |
+|     6 | Open the gripper to release it      |
+|     7 | Move the arm away                   |
+
+### Why wait 100 steps?
+
+The simulation advances one **physics step** at a time. Instead of instantly jumping upward, the controller often waits for about 100 physics updates so the motion completes smoothly and the cube has time to settle in the gripper.
+
+For example, the code inside Phase 3 might look something like this:
+
+```python
+elif self._pick_phase == 3:
+    self._step_count += 1
+
+    if self._step_count > 100:
+        self._pick_phase = 4
+        self._step_count = 0
+```
+
+This means:
+
+1. Stay in the lifting phase.
+2. Count each simulation step.
+3. After 100 steps, switch to Phase 4 (move to the target location).
+
+### In plain English
+
+You can think of this as the robot saying:
+
+> "I've already grabbed the cube. Now I'll raise it into the air and keep lifting for about 100 simulation frames before moving to the next part of the task."
+
+This lifting phase is important because it ensures the cube is safely off the table before the robot begins traveling toward the destination.
+This line is one of the most important commands in the pick-and-place program. It tells the **Franka robot's end effector (gripper)** where to move.
+
+```python
+self._franka.set_end_effector_pose(
+    np.array([[cube_pos[0], cube_pos[1], cube_pos[2] + 0.25]]),
+    down_orient
+)
+```
+
+Let's break it down piece by piece.
+
+---
+
+## `self._franka`
+
+This refers to the **Franka Panda robot** object in Isaac Sim.
+
+Think of it as:
+
+> "Use the Franka robot."
+
+---
+
+## `.set_end_effector_pose(...)`
+
+The **end effector** is the robot's hand (the gripper).
+
+This function tells the robot:
+
+> "Move your hand to this position and orientation."
+
+A **pose** consists of two things:
+
+1. **Position (x, y, z)**
+2. **Orientation (rotation)**
+
+---
+
+## `np.array(...)`
+
+```python
+np.array(...)
+```
+
+`np` is NumPy.
+
+It creates an array of numbers that Isaac Sim expects.
+
+---
+
+## `cube_pos`
+
+Earlier in the code you'll usually see something like
+
+```python
+cube_pos = self._cube.get_world_pose()[0]
+```
+
+Suppose the cube is located at
+
+```text
+x = 0.40
+y = 0.20
+z = 0.03
+```
+
+Then
+
+```python
+cube_pos[0]
+```
+
+is
+
+```text
+0.40
+```
+
+the x-coordinate.
+
+Likewise,
+
+```python
+cube_pos[1]
+```
+
+is
+
+```text
+0.20
+```
+
+the y-coordinate.
+
+And
+
+```python
+cube_pos[2]
+```
+
+is
+
+```text
+0.03
+```
+
+the z-coordinate (height above the ground).
+
+---
+
+## `cube_pos[2] + 0.25`
+
+This is the clever part.
+
+Instead of moving directly to the cube,
+
+the robot moves
+
+```text
+25 centimeters ABOVE it.
+```
+
+Example:
+
+Cube:
+
+```text
+x = 0.40
+y = 0.20
+z = 0.03
+```
+
+Robot target:
+
+```text
+x = 0.40
+y = 0.20
+z = 0.28
+```
+
+because
+
+```text
+0.03 + 0.25 = 0.28
+```
+
+So the robot is hovering above the cube.
+
+---
+
+## Why not move directly to the cube?
+
+Imagine reaching for a coffee mug.
+
+You don't slam your hand into the side.
+
+Instead you
+
+1. move above it,
+2. line up,
+3. lower your hand,
+4. grab it.
+
+The robot does exactly the same thing.
+
+This position is called the **pre-grasp pose**.
+
+---
+
+## Why the double brackets?
+
+Notice
+
+```python
+[[ ... ]]
+```
+
+instead of
+
+```python
+[ ... ]
+```
+
+This creates a **2-dimensional NumPy array** with one row and three columns:
+
+```text
+[
+ [0.40, 0.20, 0.28]
+]
+```
+
+Many Isaac Sim functions are designed to accept multiple target positions at once, so they expect a 2D array even when you're supplying just one position.
+
+---
+
+## `down_orient`
+
+This is the desired orientation (rotation) of the gripper.
+
+Instead of only specifying **where** to go, you must also specify **how** the gripper is rotated.
+
+Typically,
+
+```python
+down_orient
+```
+
+means
+
+> "Point the fingers straight downward."
+
+So while the robot is above the cube,
+
+its gripper is already facing the correct direction for grasping.
+
+---
+
+## Putting it all together
+
+If
+
+```text
+Cube Position
+x = 0.40
+y = 0.20
+z = 0.03
+```
+
+then this command tells the robot:
+
+```text
+Move the gripper to
+
+x = 0.40
+y = 0.20
+z = 0.28
+
+while pointing straight downward.
+```
+
+The robot stops **25 cm above the cube**, ready for the next phase where it lowers the gripper, closes its fingers around the cube, and eventually lifts it. This "approach from above" is a standard and reliable strategy in industrial robot manipulation because it reduces the chance of colliding with the object or the table.
+This code controls **when the robot leaves Phase 3 (lifting the cube)** and **enters Phase 4 (moving to the destination)**.
+
+```python
+if self._step_counter > 100:
+    self._pick_phase = 4
+    self._step_counter = 0
+elif self._pick_phase == 4:
+    # Move to target (wait 150 steps)
+```
+
+Let's examine it line by line.
+
+---
+
+## `if self._step_counter > 100:`
+
+The robot has a variable called `self._step_counter`.
+
+Every physics frame, the program usually does something like:
+
+```python
+self._step_counter += 1
+```
+
+So the counter increases like this:
+
+```text
+Step 1
+Step 2
+Step 3
+...
+Step 100
+Step 101
+```
+
+This line asks:
+
+> **"Have we been lifting the cube for more than 100 simulation steps?"**
+
+If the answer is **yes**, the code inside the `if` statement runs.
+
+---
+
+## `self._pick_phase = 4`
+
+This changes the robot's state.
+
+Before:
+
+```text
+_pick_phase = 3
+```
+
+Meaning:
+
+> Lift the cube.
+
+After:
+
+```text
+_pick_phase = 4
+```
+
+Meaning:
+
+> The lift is complete. Start moving toward the destination.
+
+It's like advancing to the next step in a recipe.
+
+---
+
+## `self._step_counter = 0`
+
+The counter is reset back to zero.
+
+Why?
+
+Because Phase 4 has its own timing.
+
+If you didn't reset it, the counter would already be over 100, and Phase 4 might end almost immediately instead of lasting the intended amount of time.
+
+So resetting gives Phase 4 a fresh timer.
+
+---
+
+## `elif self._pick_phase == 4:`
+
+On the next simulation frame, `_pick_phase` is now `4`.
+
+That means the program skips the earlier phases and executes the Phase 4 code.
+
+The comment says:
+
+```python
+# Move to target (wait 150 steps)
+```
+
+So during this phase, the robot begins moving the cube to its goal location.
+
+Typically, the code might look something like:
+
+```python
+elif self._pick_phase == 4:
+    self._franka.set_end_effector_pose(target_pos, down_orient)
+
+    self._step_counter += 1
+
+    if self._step_counter > 150:
+        self._pick_phase = 5
+        self._step_counter = 0
+```
+
+This means:
+
+1. Move toward the target.
+2. Count simulation steps.
+3. After 150 steps, advance to Phase 5 (usually lowering the cube).
+
+---
+
+## Timeline of what happens
+
+```text
+Phase 3
+───────────────
+Lift cube
+Counter = 0
+
+↓
+Counter = 1
+Counter = 2
+Counter = 3
+...
+Counter = 100
+Counter = 101
+
+↓
+
+Counter > 100?
+
+YES
+
+↓
+
+_pick_phase = 4
+_step_counter = 0
+
+↓
+
+Phase 4 begins
+
+Move toward destination
+
+↓
+
+Counter = 1
+Counter = 2
+...
+Counter = 150
+
+↓
+
+Advance to Phase 5
+```
+
+---
+
+## In plain English
+
+Imagine you're carrying a box across a room:
+
+* **Phase 3:** Lift the box off the floor.
+* Wait until you've finished lifting it (about 100 simulation steps).
+* **Switch to Phase 4.**
+* Reset the timer.
+* **Phase 4:** Walk across the room carrying the box.
+* Stay in that movement phase for about 150 simulation steps before continuing to the next part of the task (such as lowering and releasing the box).
+
+This is an example of a **finite state machine**, where the robot progresses through one well-defined stage at a time: **approach → grasp → lift → transport → lower → release**.
+### **Yes — you will see the end-effector move in real time.**
+
+In Isaac Sim, when your code runs (whether it’s a Python script, an Action Graph, or a custom extension) and calls something like:
+
+```python
+self._franka.set_end_effector_pose(...)
+```
+
+the robot arm physically moves in the 3D viewport as the simulation steps forward. You watch the gripper travel to the new pose, lower, close, lift, and transport the object live on screen — exactly like watching a real robot.
+
+### How it works in practice
+- You press **Play** (or run your script while the simulation is playing).
+- Every physics step, the robot controller tries to reach the target pose you set.
+- The arm animates smoothly (or with whatever controller gains/speed you configured).
+- You can orbit the camera, zoom in on the gripper, or even attach the camera to the end-effector if you want a first-person view.
+
+You can also:
+- Watch the live pose values in the Property panel or via Python printouts / UI overlays.
+- Pause the simulation at any moment to inspect the exact current end-effector pose.
+- Step frame-by-frame if you want to debug slowly.
+
+So yes — as you command the approach, descend, close, lift, and place, you will see every movement happen in real time right in front of you. That’s one of the best parts of learning in Isaac Sim.
+## Continuing with Issac Sim:
+Absolutely. The key point is that **the gripper usually does *not* rotate after grasping** in the code you've been studying. The fingers close around the cube, but the wrist keeps the same downward orientation.
+
+### Pre-grasp (hovering above the cube)
+
+![Image](https://images.openai.com/static-rsc-4/Qn8UHxQ2U2hWhKLQW9x3qRztCqYfpWaQDeQXOoe6BGyZTSCDZMv9lcsSYSNs7R_na1E4h4R5XGjO2tbK4TRC2B85w7hXPLio3vCXhuWDVygiI1x8dTh55Zjv-lRhu8X83XudDq6Mpjmr3FWr8o8E7PvVBXQvrv9ivoNQzYFOGVDK5Xpn-42OdTClEIqD5S6n?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/FLEF11L1aNI9EG9F7z2VIZXnDw73tRds-4Ezp66tPGnbbCyQuLuEQx3bdd5sh09pPaKd8lJiNLsenZa8BjHkH4l3E0GFuuwxtd8uObSTnTihDz7gR41N8CZXNXTCKRW4BgqH2vMxFYcgY6A2vLz1Qyu6MSCFUW99Ik3jd0YrwK8GgLez6_AWm0DNuoEaKgN-?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/CCzcm893ifZN5gfPwhGBGlwqWtFjQtbQ8g5EIYO6Bmy7AcrXvaIVlnxdAaJPahcMJmNDUF4R17VZ5Az1XfmsBDFaErNw9PQxTS0Y6RNLrj1VuQF6hRryLiY5nBfi4ehZ0pTSazLJnnjMg9TP4FuBXONhdfWvOJTOnxuHBjRtkpVXGSiuka_chKGkVLWgaTnC?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/uJavlgWCcTwZsGAWJJAv7_LqgOuASzGEmIFmoJBHb35ah4gXJwrxUI6wsHNRsi3NkhZvmL7h3wCOfua8jx9j4p1l4goDESFHx_Rl3mIZy1AYdtajD_AFwDNu7DxZc5VXZYIy8DmRee7l3H-OyRM0P8t9kH3zctIs_2lytXNrgIoTZ6Pzoige5J6MvdCOjYhm?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/gdBSQM0AXGPG1CDdmMBVcyAGCXfD2OhJAi-iroih0CA5KBWZi7Snokr5rVic4LdrNzV88ERKtVEQAjtdceeC4xqlnqFu4QXGAizRB6lqsMvvlq0n9l_eCFZx73wGGE2W4rGu2zxdXNeTI1TfqEe49bE5Do8kukztXKL62PlnMr3FmJ7yR3XVzMDC-lY-zhz1?purpose=fullsize)
+
+In this stage:
+
+* Fingers are **open**.
+* Gripper is **pointing downward**.
+* The robot is hovering directly above the cube.
+* The command is similar to:
+
+```python
+self._franka.set_end_effector_pose(
+    np.array([[cube_x, cube_y, cube_z + 0.25]]),
+    down_orient
+)
+```
+
+The `+0.25` places the gripper **25 cm above** the cube.
+
+---
+
+### Post-grasp (after picking up the cube)
+
+![Image](https://images.openai.com/static-rsc-4/YfGWqJw_iGG1WCb7OXiHfaK3cYQ1TjPv5yediTY-Njxcy-W_Fp63CdbTpD20jETZVfugwGkVk4ZjCeW3zQUr1VkrdrrI2P5CsGwxvQXlTTLPQbM26Wv33DfDAW78axlT35osIdfgVHgvX854mDFEnVPCkmKd7HZoFdpZa9JPXC7vkKbc1u2s2PDLzL0KZICk?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/iPcFiThnIsOb0DJo5xrN6JVlgfh3RmTg3LIyslR8XrlHkdFPvKghwM5QNkT5QeICEktZV6Cln5b25t8jz5mlfyD0vkPlAgGEW4hyCj4_XFLVSlWfJ2WAGVQEGg06Ms-Dawlk8xAMl792NBDSOFvFtquO6Ytwg9iKQe2x6DDkfg4Yj3Df1tboi2hfCOdY3RGG?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/FLEF11L1aNI9EG9F7z2VIZXnDw73tRds-4Ezp66tPGnbbCyQuLuEQx3bdd5sh09pPaKd8lJiNLsenZa8BjHkH4l3E0GFuuwxtd8uObSTnTihDz7gR41N8CZXNXTCKRW4BgqH2vMxFYcgY6A2vLz1Qyu6MSCFUW99Ik3jd0YrwK8GgLez6_AWm0DNuoEaKgN-?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/gdBSQM0AXGPG1CDdmMBVcyAGCXfD2OhJAi-iroih0CA5KBWZi7Snokr5rVic4LdrNzV88ERKtVEQAjtdceeC4xqlnqFu4QXGAizRB6lqsMvvlq0n9l_eCFZx73wGGE2W4rGu2zxdXNeTI1TfqEe49bE5Do8kukztXKL62PlnMr3FmJ7yR3XVzMDC-lY-zhz1?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/VQaXR5HvAR3NObfK5R86xFQ33k88zD1nR17dHlqXi1d49MKDS6IBxXvtadJJV76iPD5Win6S6hagOLB0DhlVtby1kE2LGmXq0hUriM_dEYtrCBcCDc42ReDT8YuNZDZAJpEDg5zkqRhs-DAcVxd5-EDEmeOCtNmtooSJKVqd1vXk5tF8l9ap_AKX2LKCTP3L?purpose=fullsize)
+
+Notice what has changed:
+
+* ✅ The fingers are now **closed** around the cube.
+* ✅ The cube is lifted off the table.
+* ✅ **The wrist is still pointing downward.**
+
+The robot simply raises its arm. It does **not** automatically rotate the gripper so the "palm" faces upward.
+
+Think of it like this:
+
+```text
+PRE-GRASP
+
+      ↓
+     | |
+     | |   ← fingers open
+      □
+
+---------------- Table ----------------
+```
+
+After grasping:
+
+```text
+POST-GRASP
+
+      ↓
+     |█|   ← fingers closed
+      □
+
+        ↑
+     Cube lifted
+```
+
+The arrow is still pointing **down** because the wrist orientation hasn't changed—only the **position** (higher `z`) has changed.
+
+If you wanted the robot to rotate the cube so the "palm" faced upward, the code would have to change the orientation from `down_orient` to a different orientation (a different quaternion). That is **not** happening in the code you've been walking through.
+
+If it would help, I can also draw a **3D side-view diagram** showing the arm, wrist, gripper, and cube before and after the grasp. Many students find that easier to understand than photographs.
+This is **Phase 5** of the state machine. At this point, the robot has **already moved to the target location and opened its gripper** to release the cube.
+
+Here's the code:
+
+```python
+elif self._pick_phase == 5:
+    # Lift the arm (wait 150 steps)
+    self._franka.set_end_effector_pose(
+        np.array([[cube_pos[0], cube_pos[1], cube_pos[2] + 0.5]]),
+        down_orient
+    )
+```
+
+Let's go through it line by line.
+
+---
+
+## `elif self._pick_phase == 5:`
+
+The robot asks:
+
+> "Am I in Phase 5?"
+
+If yes, it executes the code below.
+
+---
+
+## `# Lift the arm (wait 150 steps)`
+
+This is a comment for the programmer.
+
+It tells us the purpose of Phase 5:
+
+> **Raise the robot's arm away from the object after releasing it.**
+
+This is sometimes called a **retreat motion**.
+
+---
+
+## `self._franka.set_end_effector_pose(...)`
+
+This tells the robot where to move its gripper.
+
+The new position is
+
+```python
+np.array([[cube_pos[0], cube_pos[1], cube_pos[2] + 0.5]])
+```
+
+---
+
+## `cube_pos[0]`
+
+Keep the same **x-coordinate**.
+
+Example:
+
+```text
+x = 0.40
+```
+
+---
+
+## `cube_pos[1]`
+
+Keep the same **y-coordinate**.
+
+Example:
+
+```text
+y = 0.20
+```
+
+---
+
+## `cube_pos[2] + 0.5`
+
+Raise the gripper **50 centimeters above the cube's height**.
+
+Suppose the cube is resting on the table at
+
+```text
+x = 0.40
+y = 0.20
+z = 0.03
+```
+
+The new target becomes
+
+```text
+x = 0.40
+y = 0.20
+z = 0.53
+```
+
+because
+
+```text
+0.03 + 0.50 = 0.53
+```
+
+So the gripper moves straight upward.
+
+---
+
+## `down_orient`
+
+The wrist orientation is **still the same**.
+
+The gripper remains pointing downward.
+
+Only the **position** changes.
+
+---
+
+## Why lift the arm after releasing the cube?
+
+Imagine placing a box on a table.
+
+After letting go, you don't leave your hand resting on the box. You naturally pull your hand away.
+
+The robot does the same thing:
+
+1. Place the cube.
+2. Open the gripper.
+3. Raise the arm so it won't bump into the cube or table.
+4. Finish the task.
+
+---
+
+## Visual example
+
+### Before Phase 5 (just released)
+
+```text
+     ↓
+    |  |
+     □
+
+────────────── Table
+```
+
+The fingers are open, and the cube is sitting on the table.
+
+---
+
+### During Phase 5
+
+```text
+       ↓
+      |  |
+
+
+
+
+     □
+
+────────────── Table
+```
+
+The cube stays where it is.
+
+The **robot's arm moves upward**, leaving the object behind.
+
+---
+
+## One thing to notice
+
+There is something interesting about this code.
+
+Earlier, the robot carried the cube to the destination:
+
+```python
+self._franka.set_end_effector_pose(
+    np.array([[0.3, 0.3, 0.15]]),
+    down_orient
+)
+```
+
+But now it uses
+
+```python
+cube_pos[0], cube_pos[1], cube_pos[2] + 0.5
+```
+
+This only makes sense if `cube_pos` has been updated to the cube's **current location after it was released**. If `cube_pos` still contains the cube's original pickup location, the robot would move back above the original pickup point instead of retreating from the drop-off location.
+
+So whether this behaves correctly depends on where `cube_pos` is updated in the rest of the program.
+
+### In plain English
+
+This phase tells the robot:
+
+> **"The cube has been released. Now raise your gripper 50 cm straight upward while keeping it pointed downward. This safely moves the arm away from the object so the pick-and-place task can end without colliding with the cube or the table."**
+This is a very simple but important piece of the robot's **timing logic**.
+
+```python
+if self._step_counter > 150:
+    self._step_counter = 0
+```
+
+Let's examine it.
+
+---
+
+## `if self._step_counter > 150:`
+
+This asks:
+
+> **"Has the robot been in this phase for more than 150 simulation steps?"**
+
+Remember that somewhere else in the code, the counter is probably being increased every physics frame:
+
+```python
+self._step_counter += 1
+```
+
+So the value changes like this:
+
+```text
+0
+1
+2
+3
+...
+149
+150
+151
+```
+
+When it reaches **151**, the condition becomes true because:
+
+```text
+151 > 150
+```
+
+---
+
+## `self._step_counter = 0`
+
+Once the condition is true, the counter is reset.
+
+Before:
+
+```text
+_step_counter = 151
+```
+
+After:
+
+```text
+_step_counter = 0
+```
+
+This gives the next phase (or the next use of the counter) a fresh starting point.
+
+---
+
+## Why reset it?
+
+Imagine using a kitchen timer.
+
+You set it for **2 minutes** to bake cookies.
+
+When the timer rings, you don't leave it showing "2:00" forever—you reset it before timing the next task.
+
+The robot's step counter works the same way.
+
+---
+
+## Example
+
+Suppose the robot is lifting its arm.
+
+| Simulation Step | `_step_counter` | Action                            |
+| --------------: | --------------: | --------------------------------- |
+|               1 |               1 | Continue lifting                  |
+|              50 |              50 | Continue lifting                  |
+|             100 |             100 | Continue lifting                  |
+|             150 |             150 | Continue lifting                  |
+|             151 |             151 | Condition becomes true            |
+|     After reset |               0 | Timer is ready for the next phase |
+
+---
+
+## One important observation
+
+Notice that this code **only resets the timer**:
+
+```python
+if self._step_counter > 150:
+    self._step_counter = 0
+```
+
+It does **not** change the robot's phase.
+
+Earlier in your program, you saw code like:
+
+```python
+self._pick_phase = 4
+```
+
+or
+
+```python
+self._pick_phase = 5
+```
+
+Those lines tell the robot to move to the next stage.
+
+This snippet **doesn't do that**. It simply resets the timer.
+
+That means one of two things is likely true:
+
+1. **More code follows** (perhaps on the next line) that changes `_pick_phase`, or
+2. **Phase 5 is the final phase**, and the author only wants to stop the timer because there are no more phases.
+
+---
+
+### In plain English
+
+This code tells the robot:
+
+> **"Once you've been in this phase for more than 150 simulation steps, reset your timer back to zero."**
+
+By itself, it **doesn't make the robot do anything new**—it only prepares the timer for whatever comes next in the program.
+Summary
+This tutorial covered the following topics:
+
+Adding multiple robots and objects (cube) to the scene
+
+Using Cube, GeomPrim, and RigidPrim to create pushable objects
+
+Using the Articulation class to control different robot types
+
+Having a mobile robot (Jetbot) push objects towards a manipulator (Franka)
+
+Building state machine logic to coordinate pushing, backing up, and picking
+
+Using Franka for IK-based end-effector control and gripper operations
+
+Next Steps
+Continue on to the next tutorial in our Essential Tutorials series, Multiple Robot Scenarios, to learn how to add multiple tasks and manage them.
+## Multiple Robot Scenarios
+Learning Objectives
+This tutorial describes how to create and manage multiple robot scenarios in NVIDIA Isaac Sim. It explains how to use parameterization and Python classes to scale your simulations with multiple instances of robots performing similar tasks. After this tutorial, you will have more experience building scalable multi-robot simulations in NVIDIA Isaac Sim.
+
+15-20 Minute Tutorial:
+Day_Log 07/28/2026:
+Let's go through each line one at a time.
+
+```cpp
+#include <memory>
+```
+
+### What it does
+
+This tells the C++ compiler to include the **Standard Library memory utilities**.
+
+### Why it is needed
+
+Behavior Tree plugins and ROS 2 frequently use **smart pointers** instead of ordinary pointers.
+
+Examples include:
+
+* `std::shared_ptr`
+* `std::unique_ptr`
+* `std::weak_ptr`
+
+These automatically manage memory so you don't have to manually call `delete`.
+
+Example:
+
+```cpp
+std::shared_ptr<MyClass> node;
+```
+
+Without
+
+```cpp
+#include <memory>
+```
+
+the compiler would not know what `std::shared_ptr` is.
+
+---
+
+```cpp
+#include <string>
+```
+
+### What it does
+
+Loads the C++ Standard Library string class.
+
+Instead of using old C-style strings like
+
+```cpp
+char name[20];
+```
+
+modern C++ uses
+
+```cpp
+std::string
+```
+
+Example:
+
+```cpp
+std::string robot_name = "TIAGo";
+```
+
+Behavior Tree nodes often receive strings from XML ports.
+
+Example:
+
+```cpp
+std::string goal;
+```
+
+---
+
+```cpp
+#include "rclcpp/rclcpp.hpp"
+```
+
+### What it does
+
+This includes the main **ROS 2 C++ client library**.
+
+Think of this as loading the entire ROS 2 toolbox into your program.
+
+Without this header, your program cannot use ROS 2 features.
+
+Examples include:
+
+* Nodes
+* Publishers
+* Subscribers
+* Timers
+* Parameters
+* Logging
+* Services
+* Clients
+
+---
+
+### Example
+
+Logging:
+
+```cpp
+RCLCPP_INFO(logger, "Robot started");
+```
+
+Creating a node:
+
+```cpp
+auto node = rclcpp::Node::make_shared("robot");
+```
+
+Without
+
+```cpp
+#include "rclcpp/rclcpp.hpp"
+```
+
+none of those would exist.
+
+---
+
+### Why does BT Navigator need this?
+
+Your Behavior Tree node is also a ROS 2 component.
+
+It often needs to
+
+* print messages
+* read parameters
+* communicate with topics
+* call services
+
+Those capabilities come from **rclcpp**.
+
+---
+
+```cpp
+#include "behaviortree_cpp_v3/action_node.h"
+```
+
+This is the most important include in this tutorial.
+
+### What it does
+
+It loads the BehaviorTree.CPP library's **Action Node** class.
+
+Your custom node will inherit from this class.
+
+Think of it like this:
+
+```
+BehaviorTree Library
+        │
+        ▼
+ActionNodeBase
+        │
+        ▼
+BT::SyncActionNode
+        │
+        ▼
+Your LogPrinter Node
+```
+
+Without this header, C++ has no idea what an Action Node is.
+
+---
+
+### Why Action Node?
+
+Behavior Trees contain different node types.
+
+```
+Behavior Tree
+
+         Root
+           │
+     ┌─────┴─────┐
+     │           │
+ Condition    Action
+```
+
+An Action Node **does something**.
+
+Examples:
+
+* Move robot
+* Pick up object
+* Open gripper
+* Speak
+* Print a log
+* Wait
+* Rotate
+* Dock
+
+In this tutorial the action simply prints a message.
+
+---
+
+### Why not another node type?
+
+BehaviorTree.CPP provides several kinds of nodes.
+
+| Node Type | Purpose                                    |
+| --------- | ------------------------------------------ |
+| Action    | Performs work                              |
+| Condition | Returns Success or Failure based on a test |
+| Decorator | Changes the behavior of another node       |
+| Control   | Chooses which child nodes run              |
+
+Examples:
+
+Action:
+
+```
+MoveToGoal
+```
+
+Condition:
+
+```
+BatteryOK?
+```
+
+Decorator:
+
+```
+Repeat Until Success
+```
+
+Control:
+
+```
+Sequence
+Fallback
+Parallel
+```
+
+---
+
+## Putting all four includes together
+
+```cpp
+#include <memory>
+```
+
+"I want to use smart pointers."
+
+↓
+
+```cpp
+#include <string>
+```
+
+"I want to use C++ strings."
+
+↓
+
+```cpp
+#include "rclcpp/rclcpp.hpp"
+```
+
+"I want to use ROS 2."
+
+↓
+
+```cpp
+#include "behaviortree_cpp_v3/action_node.h"
+```
+
+"I want to create a Behavior Tree Action Node."
+
+---
+
+### In simple terms
+
+Imagine you're building a robot mechanic's toolbox:
+
+* `<memory>` → Gives you safe containers for robot objects (smart pointers).
+* `<string>` → Lets the robot work with text like names and commands.
+* `rclcpp.hpp` → Gives access to the ROS 2 operating system (logging, nodes, topics, services).
+* `action_node.h` → Gives you the blueprint for creating a new Behavior Tree action, such as "Move Robot," "Close Gripper," or in this tutorial, "Print a Log Message."
+
+These four `#include` statements don't perform any actions themselves—they simply make the necessary C++ classes and functions available so the rest of the program can compile and use them.
+
+
+
 
 
