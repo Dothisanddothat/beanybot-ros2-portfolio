@@ -5116,6 +5116,2600 @@ Imagine you're building a robot mechanic's toolbox:
 * `action_node.h` → Gives you the blueprint for creating a new Behavior Tree action, such as "Move Robot," "Close Gripper," or in this tutorial, "Print a Log Message."
 
 These four `#include` statements don't perform any actions themselves—they simply make the necessary C++ classes and functions available so the rest of the program can compile and use them.
+This code is defining a **Behavior Tree (BT) node** in C++. Let's go through it one line at a time.
+
+```cpp
+namespace goal_navigation_tutorial
+{
+```
+
+### `namespace goal_navigation_tutorial Day_Log 07/28/2026:
+
+A **namespace** is simply a way to organize code and avoid name conflicts.
+
+Think of it like folders on your computer.
+
+For example:
+
+```
+Desktop
+├── Photos
+│   └── cat.jpg
+├── Work
+│   └── report.docx
+```
+
+Both folders could contain a file named `notes.txt` without conflicting.
+
+In C++, a namespace does the same thing:
+
+```cpp
+namespace math
+{
+    int add(int a, int b);
+}
+
+namespace finance
+{
+    int add(int income, int expense);
+}
+```
+
+Now the compiler knows which `add()` function you mean.
+
+---
+
+## Next
+
+```cpp
+/**
+* @brief A BT node that logs a message to the console
+* with a specific log level that could be INFO, WARN, ERROR.
+*/
+```
+
+This is **documentation**, not executable code.
+
+`/** ... */` is a special comment format used by documentation tools such as **Doxygen**.
+
+`@brief` means:
+
+> "Here is a short description."
+
+It tells us:
+
+> This Behavior Tree node prints a message to the console.
+
+The message can have different importance levels:
+
+* **INFO** – Normal information
+* **WARN** – Something unusual happened
+* **ERROR** – Something went wrong
+
+For example:
+
+```
+INFO: Robot reached waypoint.
+```
+
+```
+WARN: Battery is getting low.
+```
+
+```
+ERROR: Cannot find navigation map.
+```
+
+---
+
+## The class definition
+
+```cpp
+class LogPrinter : public BT::AsyncActionNode
+```
+
+This line is very important.
+
+It creates a new class called:
+
+```cpp
+LogPrinter
+```
+
+But notice:
+
+```cpp
+: public BT::AsyncActionNode
+```
+
+This means
+
+> **LogPrinter inherits from `BT::AsyncActionNode`.**
+
+It is saying:
+
+> "Build my new node using the features already provided by BehaviorTree.CPP's asynchronous action node."
+
+Think of it like inheritance in real life.
+
+```
+          Vehicle
+             ↑
+          Robot Car
+```
+
+The robot car automatically has wheels, steering, etc., because it inherits from `Vehicle`.
+
+Likewise:
+
+```
+        BT::AsyncActionNode
+                 ↑
+            LogPrinter
+```
+
+`LogPrinter` automatically gets the behavior of an asynchronous Behavior Tree node.
+
+---
+
+## What is an `AsyncActionNode`?
+
+Behavior Trees have different kinds of nodes.
+
+```
+Behavior Tree
+
+├── Sequence
+├── Fallback
+├── Condition
+├── Action
+└── Async Action
+```
+
+A normal action finishes almost immediately.
+
+For example:
+
+```
+Turn on LED
+```
+
+takes only milliseconds.
+
+An **AsyncActionNode** is used when something takes time.
+
+Examples:
+
+* Navigate to a room
+* Wait for an elevator
+* Pick up an object
+* Follow a person
+* Scan the environment
+
+These actions may take several seconds or minutes.
+
+Instead of freezing the whole Behavior Tree, they run asynchronously while the tree continues ticking.
+
+---
+
+## Why use `LogPrinter` as an AsyncActionNode?
+
+Imagine your Behavior Tree contains:
+
+```
+Sequence
+   |
+   +--> LogPrinter
+   |
+   +--> NavigateToGoal
+```
+
+When `LogPrinter` runs, it might print:
+
+```
+INFO: Starting navigation.
+```
+
+or
+
+```
+WARN: Localization confidence is low.
+```
+
+or
+
+```
+ERROR: Navigation failed.
+```
+
+The Behavior Tree can continue operating while the node manages its asynchronous execution according to the BehaviorTree.CPP framework.
+
+---
+
+### Overall picture
+
+```cpp
+namespace goal_navigation_tutorial
+{
+    class LogPrinter : public BT::AsyncActionNode
+```
+
+means:
+
+* Create a namespace named **goal_navigation_tutorial**.
+* Inside that namespace, define a new class called **LogPrinter**.
+* Make `LogPrinter` inherit from **BehaviorTree.CPP's `AsyncActionNode`**.
+* This node's purpose is to print log messages (INFO, WARN, or ERROR) during execution of the Behavior Tree.
+
+This is a common pattern in ROS 2 navigation and BehaviorTree.CPP: you create custom nodes by inheriting from one of the base node classes (such as `ActionNodeBase`, `SyncActionNode`, `AsyncActionNode`, or `ConditionNode`) and then implement the behavior you want. 
+This is the **constructor** for the `LogPrinter` class. A constructor is a special function that runs **automatically when an object is created**. Let's go through it line by line.
+
+```cpp
+public:
+```
+
+## `public:`
+
+A C++ class can have three access levels:
+
+* `public` → Anyone can use these functions and variables.
+* `private` → Only the class itself can use them.
+* `protected` → The class and its child classes can use them.
+
+Here, `public:` means:
+
+> "Everything that follows can be accessed from outside the class."
+
+---
+
+```cpp
+/**
+ * @brief A constructor for goal_navigation_tutorial::LogPrinter
+ *
+ * @param xml_tag_name Name for the XML tag for this node
+ * @param conf BT node configuration
+ */
+```
+
+Again, this is **documentation** for programmers.
+
+### `@brief`
+
+A short description:
+
+> This is the constructor for `LogPrinter`.
+
+### `@param xml_tag_name`
+
+Explains the first parameter.
+
+For example, in a Behavior Tree XML file you might write:
+
+```xml
+<LogPrinter message="Starting navigation"/>
+```
+
+The XML tag name would be:
+
+```text
+LogPrinter
+```
+
+That name is passed into the constructor as:
+
+```cpp
+xml_tag_name
+```
+
+---
+
+### `@param conf`
+
+This is the **Behavior Tree configuration**.
+
+It contains information such as:
+
+* Input ports
+* Output ports
+* Blackboard connections
+* Parameters from the XML
+
+Think of it as a package of settings that the Behavior Tree engine hands to every node when it creates it.
+
+---
+
+## The constructor declaration
+
+```cpp
+LogPrinter(
+```
+
+This is **not** an ordinary function.
+
+Because its name matches the class name:
+
+```cpp
+class LogPrinter
+```
+
+it is the constructor.
+
+When you create an object:
+
+```cpp
+LogPrinter logger(...);
+```
+
+this constructor automatically runs.
+
+---
+
+## First parameter
+
+```cpp
+const std::string & xml_tag_name,
+```
+
+Let's break this apart.
+
+### `std::string`
+
+A C++ string.
+
+Example:
+
+```cpp
+"LogPrinter"
+```
+
+---
+
+### `&`
+
+The ampersand means:
+
+**Pass by reference.**
+
+Instead of making a copy of the string, the constructor uses the original.
+
+Imagine a 100-page document.
+
+Without `&`:
+
+> Make another 100-page copy.
+
+With `&`:
+
+> Just hand me the original document.
+
+This saves memory and is much faster.
+
+---
+
+### `const`
+
+`const` means:
+
+> "I promise not to change this string."
+
+So
+
+```cpp
+const std::string &
+```
+
+means:
+
+> "Give me the original string, and I promise not to modify it."
+
+This is a very common pattern in modern C++.
+
+---
+
+## Second parameter
+
+```cpp
+const BT::NodeConfiguration & conf
+```
+
+Again:
+
+* `const` → Don't modify it.
+* `&` → Don't make a copy.
+* `BT::NodeConfiguration` → The configuration information supplied by BehaviorTree.CPP.
+
+This object contains all the setup information for the node.
+
+---
+
+## Closing parenthesis
+
+```cpp
+)
+```
+
+The constructor now knows everything it needs:
+
+* the XML node name
+* the configuration
+
+---
+
+## This next line is extremely important
+
+```cpp
+: BT::AsyncActionNode(xml_tag_name, conf)
+```
+
+This is called the **constructor initializer list**.
+
+It runs **before** the body of the constructor.
+
+Since `LogPrinter` inherits from:
+
+```cpp
+BT::AsyncActionNode
+```
+
+the base class must be constructed first.
+
+You're telling C++:
+
+> "Before constructing `LogPrinter`, first construct the parent `AsyncActionNode` using these arguments."
+
+It is equivalent in concept to saying:
+
+```
+Build the parent class first.
+        ↓
+Parent receives:
+    xml_tag_name
+    conf
+        ↓
+Now build LogPrinter.
+```
+
+Without this line, the parent class might not be initialized correctly.
+
+---
+
+## Why not do it inside `{ }`?
+
+Imagine you have:
+
+```cpp
+class Car
+{
+public:
+    Car(std::string color);
+};
+```
+
+and
+
+```cpp
+class SportsCar : public Car
+{
+};
+```
+
+The `Car` constructor must run **before** the `SportsCar` constructor.
+
+That's why C++ uses the initializer list.
+
+The order is:
+
+```
+Create parent class
+        ↓
+Initialize its variables
+        ↓
+Create child class
+        ↓
+Run child constructor body
+```
+
+---
+
+## What values might these parameters contain?
+
+Suppose your Behavior Tree XML contains:
+
+```xml
+<LogPrinter message="Robot Started"/>
+```
+
+The Behavior Tree engine might call:
+
+```cpp
+LogPrinter(
+    "LogPrinter",
+    configuration
+);
+```
+
+where:
+
+* `xml_tag_name` = `"LogPrinter"`
+* `conf` = all the node's configuration information
+
+The initializer list then passes both directly to the parent class:
+
+```cpp
+BT::AsyncActionNode(
+    "LogPrinter",
+    configuration
+);
+```
+
+so the base `AsyncActionNode` is fully initialized before `LogPrinter` adds its own behavior.
+
+---
+
+### Overall flow
+
+```
+Behavior Tree loads XML
+          │
+          ▼
+Reads <LogPrinter ...>
+          │
+          ▼
+Calls LogPrinter constructor
+          │
+          ▼
+Initializer list executes first
+BT::AsyncActionNode(xml_tag_name, conf)
+          │
+          ▼
+Parent AsyncActionNode is built
+          │
+          ▼
+LogPrinter construction continues
+```
+
+This pattern—using an initializer list to initialize the base class—is standard C++ and is used throughout ROS 2 and BehaviorTree.CPP because it ensures the inherited base class is correctly set up before the derived class begins executing its own logic.
+Excellent. Now we're inside the **body of the constructor**. This code runs **after** the parent `BT::AsyncActionNode` has been initialized. Its job is to get the information the node needs before it can run.
+
+Let's go through it line by line.
+
+```cpp
+{
+```
+
+This opens the constructor body.
+
+Everything between `{` and `}` runs automatically when a `LogPrinter` object is created.
+
+---
+
+## Line 1
+
+```cpp
+node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
+```
+
+This is probably the most important line in the constructor.
+
+Let's break it apart.
+
+### `config()`
+
+Remember this?
+
+```cpp
+LogPrinter(
+    const BT::NodeConfiguration & conf)
+```
+
+The parent class (`AsyncActionNode`) stored that configuration for us.
+
+Calling
+
+```cpp
+config()
+```
+
+returns the node's configuration.
+
+---
+
+### `.blackboard`
+
+BehaviorTree.CPP has something called a **Blackboard**.
+
+Think of it as a **shared notebook** that every Behavior Tree node can read from and write to.
+
+```
+             Blackboard
+
+        +--------------------+
+        | Robot Node         |
+        | Goal Position      |
+        | Current Battery    |
+        | Current Map        |
+        +--------------------+
+
+          ↑      ↑      ↑
+
+   Navigate   Planner   LogPrinter
+```
+
+Instead of every node making its own copy of the robot information, they all share the Blackboard.
+
+---
+
+### `->get<...>("node")`
+
+This says:
+
+> "Retrieve the object named `"node"` from the Blackboard."
+
+The `<...>` tells C++ what type to expect.
+
+```cpp
+<rclcpp::Node::SharedPtr>
+```
+
+means:
+
+> "I expect `"node"` to be a shared pointer to a ROS 2 node."
+
+---
+
+### `rclcpp::Node::SharedPtr`
+
+A **SharedPtr** (shared pointer) is a smart pointer.
+
+Instead of manually managing memory, several objects can safely share ownership of the same ROS node.
+
+Imagine one robot controller used by several Behavior Tree nodes.
+
+```
+                ROS Node
+             +-----------+
+             | rclcpp    |
+             +-----------+
+              ↑    ↑    ↑
+              |    |    |
+         Planner Logger Navigator
+```
+
+Every node shares the same ROS node.
+
+---
+
+### `node_ = ...`
+
+Store that pointer inside this class.
+
+Now `LogPrinter` can call ROS logging functions like:
+
+```cpp
+RCLCPP_INFO(...)
+```
+
+or
+
+```cpp
+RCLCPP_WARN(...)
+```
+
+---
+
+## Line 2
+
+```cpp
+getInput("log_text", log_text_);
+```
+
+Behavior Tree nodes receive values from the XML.
+
+Suppose the XML contains
+
+```xml
+<LogPrinter
+    log_text="Robot starting"
+    log_level="INFO"/>
+```
+
+This line says:
+
+> "Read the input port named `log_text`."
+
+Then store it in
+
+```cpp
+log_text_
+```
+
+Afterward,
+
+```
+log_text_ = "Robot starting"
+```
+
+---
+
+## Line 3
+
+```cpp
+getInput("log_level", log_level_);
+```
+
+Exactly the same idea.
+
+Read
+
+```
+log_level
+```
+
+from the XML.
+
+Now
+
+```
+log_level_ = "INFO"
+```
+
+or perhaps
+
+```
+"WARN"
+```
+
+or
+
+```
+"ERROR"
+```
+
+depending on what the XML specified.
+
+---
+
+## Line 4
+
+```cpp
+if (log_text_.empty()) {
+```
+
+Now we check whether
+
+```
+log_text_
+```
+
+contains anything.
+
+Suppose someone wrote
+
+```xml
+<LogPrinter log_level="INFO"/>
+```
+
+Notice the mistake?
+
+There is **no**
+
+```
+log_text
+```
+
+parameter.
+
+Then
+
+```
+log_text_
+```
+
+would be an empty string.
+
+```
+""
+```
+
+Calling
+
+```cpp
+.empty()
+```
+
+asks
+
+> "Does this string have zero characters?"
+
+If yes,
+
+execute the code inside.
+
+---
+
+## Inside the first `if`
+
+```cpp
+RCLCPP_WARN(
+    node_->get_logger(),
+    "LogPrinter: log_text is empty");
+```
+
+This prints a ROS warning.
+
+The console might display
+
+```
+[WARN]
+LogPrinter: log_text is empty
+```
+
+Notice
+
+```cpp
+node_->get_logger()
+```
+
+We're using the ROS node we got from the Blackboard earlier.
+
+Without that pointer,
+
+we couldn't log messages.
+
+---
+
+## Next
+
+```cpp
+if (log_level_.empty()) {
+```
+
+Now check whether the user forgot to provide
+
+```
+log_level
+```
+
+Suppose the XML is
+
+```xml
+<LogPrinter
+    log_text="Starting robot"/>
+```
+
+No log level was specified.
+
+Then
+
+```
+log_level_
+```
+
+is empty.
+
+---
+
+## Inside the second `if`
+
+```cpp
+RCLCPP_WARN(
+    node_->get_logger(),
+    "LogPrinter: log_level is empty, setting to INFO");
+```
+
+ROS prints
+
+```
+[WARN]
+LogPrinter: log_level is empty,
+setting to INFO
+```
+
+This warns the programmer that a value was missing.
+
+---
+
+## Final line
+
+```cpp
+log_level_ = "INFO";
+```
+
+Instead of crashing,
+
+the node chooses a sensible default.
+
+Now
+
+```
+log_level_ = "INFO"
+```
+
+Even though the XML omitted it,
+
+the node can still continue working.
+
+This is a common defensive programming technique: if an optional value is missing, use a safe default rather than failing.
+
+---
+
+# Example
+
+Suppose the XML contains:
+
+```xml
+<LogPrinter
+    log_text="Navigation started"
+    log_level="WARN"/>
+```
+
+Execution looks like this:
+
+```
+Constructor starts
+        │
+        ▼
+Get ROS node from Blackboard
+        │
+        ▼
+node_ points to ROS node
+        │
+        ▼
+Read log_text
+        │
+        ▼
+log_text_ = "Navigation started"
+        │
+        ▼
+Read log_level
+        │
+        ▼
+log_level_ = "WARN"
+        │
+        ▼
+Is log_text empty?
+        │
+       No
+        │
+        ▼
+Is log_level empty?
+        │
+       No
+        │
+        ▼
+Constructor finished
+```
+
+Now imagine this XML instead:
+
+```xml
+<LogPrinter/>
+```
+
+Execution changes:
+
+```
+Constructor starts
+        │
+        ▼
+Get ROS node from Blackboard
+        │
+        ▼
+Read log_text → ""
+        │
+        ▼
+Read log_level → ""
+        │
+        ▼
+WARNING:
+log_text is empty
+        │
+        ▼
+WARNING:
+log_level is empty
+        │
+        ▼
+Set
+log_level_ = "INFO"
+        │
+        ▼
+Constructor finished
+```
+
+So, by the time the constructor completes, the `LogPrinter` object has:
+
+* Retrieved the shared ROS 2 node from the Behavior Tree Blackboard.
+* Loaded the `log_text` and `log_level` inputs from the Behavior Tree XML.
+* Warned the user if required values were missing.
+* Assigned `"INFO"` as a default log level if none was provided.
+
+This ensures the node is properly initialized and ready to execute when the Behavior Tree ticks it.
+This is one of the **most important functions** in a BehaviorTree.CPP node. It tells the Behavior Tree engine:
+
+> **"What information does my node expect to receive?"**
+
+Let's go through it line by line.
+
+---
+
+```cpp
+/**
+ * @brief Creates list of BT ports
+ * @return BT::PortsList Containing basic ports along with node-specific ports
+ */
+```
+
+This is documentation.
+
+### `@brief`
+
+A short description:
+
+> This function creates a list of ports.
+
+### `@return`
+
+It tells programmers:
+
+> This function returns a `BT::PortsList`.
+
+A **PortsList** is simply a collection of input and output ports.
+
+Think of ports like the plugs on the back of a computer.
+
+```
+               LogPrinter
+
+         +----------------------+
+         |                      |
+Input ---> log_text             |
+Input ---> log_level            |
+         |                      |
+         +----------------------+
+```
+
+The Behavior Tree engine needs to know what plugs (ports) this node has.
+
+---
+
+## Next line
+
+```cpp
+static BT::PortsList providedPorts()
+```
+
+Let's break it apart.
+
+### `static`
+
+This is important.
+
+Normally, functions belong to an object.
+
+For example:
+
+```cpp
+LogPrinter printer(...);
+printer.tick();
+```
+
+But a **static** function belongs to the **class itself**, not a specific object.
+
+That means the Behavior Tree engine can ask:
+
+> "Before I even create a `LogPrinter`, what ports does it require?"
+
+without creating the object.
+
+So it can simply call:
+
+```cpp
+LogPrinter::providedPorts();
+```
+
+Notice there is no object.
+
+---
+
+### `BT::PortsList`
+
+This is the return type.
+
+It means
+
+> "I'm going to return a list of ports."
+
+---
+
+### `providedPorts()`
+
+This is a special function name recognized by BehaviorTree.CPP.
+
+When the library registers your node, it automatically calls this function.
+
+Imagine the library asking:
+
+```
+Behavior Tree Engine
+
+        │
+        ▼
+"What inputs do you need?"
+        │
+        ▼
+LogPrinter::providedPorts()
+        │
+        ▼
+Returns:
+log_text
+log_level
+```
+
+Now the engine knows how to connect values from the XML.
+
+---
+
+## Opening brace
+
+```cpp
+{
+```
+
+Beginning of the function.
+
+---
+
+## Return statement
+
+```cpp
+return
+{
+```
+
+We're returning a collection.
+
+Think of it as returning a shopping list.
+
+```
+Shopping List
+
+Milk
+Bread
+Eggs
+```
+
+Instead we're returning a list of ports.
+
+---
+
+## First port
+
+```cpp
+BT::InputPort<std::string>(
+    "log_text",
+    "Text to be logged"
+),
+```
+
+Let's examine this.
+
+### `BT::InputPort`
+
+This creates an **input port**.
+
+An input port receives information from outside the node.
+
+Think of it like a mailbox.
+
+```
+Outside World
+      │
+      ▼
++---------------+
+|   log_text    |
++---------------+
+      │
+      ▼
+ LogPrinter
+```
+
+---
+
+### `<std::string>`
+
+This tells the compiler the type.
+
+```
+InputPort<std::string>
+```
+
+means
+
+> This port accepts text.
+
+Examples:
+
+```
+"Robot Started"
+
+"Goal Reached"
+
+"Battery Low"
+
+"Navigation Failed"
+```
+
+---
+
+### `"log_text"`
+
+This is the name of the port.
+
+The XML must use this exact name.
+
+Example:
+
+```xml
+<LogPrinter
+    log_text="Robot started"
+    log_level="INFO"/>
+```
+
+BehaviorTree.CPP matches:
+
+```
+XML
+──────────────
+log_text
+
+↓
+
+Input Port
+──────────────
+log_text
+```
+
+If the names don't match,
+
+the value won't be passed to the node.
+
+---
+
+### `"Text to be logged"`
+
+This is just a description.
+
+It helps documentation tools and developers understand the purpose of the port.
+
+It does **not** affect execution.
+
+---
+
+## Second port
+
+```cpp
+BT::InputPort<std::string>(
+    "log_level",
+    "Log level (INFO, WARN, ERROR)"
+),
+```
+
+Exactly the same idea.
+
+Create another input port.
+
+Its name is
+
+```
+log_level
+```
+
+Its type is
+
+```
+std::string
+```
+
+Possible values are
+
+```
+INFO
+WARN
+ERROR
+```
+
+Again, the second string is just a helpful description.
+
+---
+
+## Closing braces
+
+```cpp
+};
+```
+
+This completes the list of ports being returned.
+
+---
+
+## Final brace
+
+```cpp
+}
+```
+
+End of the function.
+
+---
+
+# How this connects to the constructor
+
+Earlier, the constructor contained these lines:
+
+```cpp
+getInput("log_text", log_text_);
+getInput("log_level", log_level_);
+```
+
+Where do those values come from?
+
+From the ports declared here.
+
+The flow looks like this:
+
+```
+Behavior Tree XML
+
+<LogPrinter
+    log_text="Starting navigation"
+    log_level="INFO"/>
+
+          │
+          ▼
+
+providedPorts()
+
+Declares:
+
+log_text
+log_level
+
+          │
+          ▼
+
+BehaviorTree.CPP
+
+Creates those ports
+
+          │
+          ▼
+
+Constructor
+
+getInput("log_text", log_text_);
+getInput("log_level", log_level_);
+
+          │
+          ▼
+
+Variables now contain
+
+log_text_ = "Starting navigation"
+
+log_level_ = "INFO"
+```
+
+---
+
+# Real-world analogy
+
+Imagine you're filling out a shipping form.
+
+```
+Shipping Form
+
+Name:
+Address:
+Phone:
+```
+
+Those fields define what information is expected.
+
+Later, someone fills in:
+
+```
+Name: Alice
+Address: 123 Main St.
+Phone: 555-1234
+```
+
+The shipping company reads those values into its system.
+
+`providedPorts()` works the same way:
+
+1. It defines the **fields** (ports) the node accepts.
+2. The XML provides the **values**.
+3. `getInput()` reads those values into the node's member variables.
+
+---
+
+## Overall picture
+
+```
+          LogPrinter Class
+         ┌──────────────────────────┐
+         │ providedPorts()          │
+         │                          │
+         │ log_text   (string)      │
+         │ log_level  (string)      │
+         └─────────────┬────────────┘
+                       │
+                       ▼
+             Behavior Tree Engine
+                       │
+                       ▼
+           Reads Behavior Tree XML
+                       │
+                       ▼
+<LogPrinter
+    log_text="Goal reached"
+    log_level="INFO"/>
+                       │
+                       ▼
+          getInput() copies values
+                       │
+                       ▼
+log_text_ = "Goal reached"
+log_level_ = "INFO"
+```
+
+So, `providedPorts()` is essentially the **interface** of your Behavior Tree node. It advertises, "These are the inputs I expect." Later, when the node is constructed and executed, `getInput()` retrieves the values supplied for those ports from the Behavior Tree XML.
+Excellent! This is the **heart of the Behavior Tree node**. Everything you've studied so far (constructor, ports, Blackboard) was preparing for this function.
+
+The **`tick()`** function is what the Behavior Tree calls every time it wants this node to do its job.
+
+Let's examine it line by line.
+
+---
+
+```cpp
+private:
+```
+
+## `private:`
+
+Earlier we saw:
+
+```cpp
+public:
+```
+
+Now we have:
+
+```cpp
+private:
+```
+
+This means:
+
+> "Everything below can only be used inside the `LogPrinter` class."
+
+Outside code cannot directly call or modify these members.
+
+---
+
+```cpp
+/**
+ * @brief Function to perform some user-defined operation on tick
+ */
+```
+
+This is documentation.
+
+It tells programmers:
+
+> This function contains the work the node performs whenever the Behavior Tree "ticks" it.
+
+---
+
+## The function
+
+```cpp
+BT::NodeStatus tick() override
+```
+
+This is probably the single most important function in a BehaviorTree.CPP node.
+
+Let's break it apart.
+
+---
+
+### `BT::NodeStatus`
+
+Every Behavior Tree node must return a status.
+
+There are three possible values:
+
+```text
+SUCCESS
+FAILURE
+RUNNING
+```
+
+Think of them like traffic lights.
+
+```
+SUCCESS  ✅ Finished successfully
+
+FAILURE  ❌ Could not complete
+
+RUNNING  ⏳ Still working
+```
+
+Since `LogPrinter` only prints one message, it finishes immediately.
+
+So it only returns
+
+```
+SUCCESS
+```
+
+or
+
+```
+FAILURE
+```
+
+---
+
+### `tick()`
+
+Every time the Behavior Tree reaches this node, it calls
+
+```cpp
+tick();
+```
+
+You can think of it like this:
+
+```
+Behavior Tree
+
+Sequence
+   |
+   +---- LogPrinter
+```
+
+When execution reaches `LogPrinter`:
+
+```
+Behavior Tree
+      │
+      ▼
+Call tick()
+      │
+      ▼
+Print message
+      │
+      ▼
+Return SUCCESS
+```
+
+---
+
+### `override`
+
+This keyword tells C++:
+
+> "I'm replacing the `tick()` function defined in the parent class."
+
+Remember:
+
+```
+BT::AsyncActionNode
+        ▲
+        │
+   LogPrinter
+```
+
+The parent class already declares a virtual `tick()`.
+
+Your class supplies its own implementation.
+
+The compiler checks that you're actually overriding an existing virtual function. If you accidentally misspell the function name or use the wrong signature, `override` causes a compile-time error instead of silently creating a different function.
+
+---
+
+## Beginning of the function
+
+```cpp
+{
+```
+
+Everything inside executes whenever the node is ticked.
+
+---
+
+## First decision
+
+```cpp
+if (log_level_ == "INFO") {
+```
+
+Here we're asking:
+
+> Is the log level equal to `"INFO"`?
+
+Suppose earlier the constructor read:
+
+```xml
+<LogPrinter
+    log_text="Navigation started"
+    log_level="INFO"/>
+```
+
+Then
+
+```
+log_level_
+
+↓
+
+"INFO"
+```
+
+The answer is **Yes**.
+
+---
+
+## Print an INFO message
+
+```cpp
+RCLCPP_INFO(
+    node_->get_logger(),
+    "%s",
+    log_text_.c_str());
+```
+
+This is a ROS 2 logging macro.
+
+It prints an informational message.
+
+Suppose
+
+```
+log_text_
+
+↓
+
+"Navigation started"
+```
+
+The console prints
+
+```
+[INFO]
+Navigation started
+```
+
+---
+
+### Why `%s`?
+
+This comes from the C `printf()` style formatting.
+
+`%s` means:
+
+> Insert a string here.
+
+---
+
+### `log_text_.c_str()`
+
+`log_text_` is a C++ `std::string`.
+
+The logging macro expects a C-style string (`const char*`).
+
+So we convert it.
+
+```
+std::string
+
+↓
+
+.c_str()
+
+↓
+
+const char*
+```
+
+For example,
+
+```
+std::string
+
+↓
+
+"Robot Ready"
+
+↓
+
+.c_str()
+
+↓
+
+Pointer to
+
+R o b o t   R e a d y \0
+```
+
+The macro then prints that text.
+
+---
+
+## Return
+
+```cpp
+return BT::NodeStatus::SUCCESS;
+```
+
+This tells the Behavior Tree:
+
+> I completed my job successfully.
+
+Execution continues to the next node.
+
+---
+
+# Second case
+
+```cpp
+else if (log_level_ == "WARN")
+```
+
+Suppose
+
+```
+log_level_
+
+↓
+
+"WARN"
+```
+
+Now this branch runs.
+
+---
+
+```cpp
+RCLCPP_WARN(...)
+```
+
+Console output:
+
+```
+[WARN]
+Battery Low
+```
+
+Then
+
+```cpp
+return SUCCESS;
+```
+
+Again, the node finished correctly.
+
+---
+
+# Third case
+
+```cpp
+else if (log_level_ == "ERROR")
+```
+
+Suppose
+
+```
+log_level_
+
+↓
+
+"ERROR"
+```
+
+Now we print
+
+```cpp
+RCLCPP_ERROR(...)
+```
+
+Console output:
+
+```
+[ERROR]
+Motor Failure
+```
+
+Again,
+
+```
+SUCCESS
+```
+
+is returned because the **job of this node is to log a message**, and it did that successfully.
+
+Notice something important:
+
+The log message being an "ERROR" **does not mean the Behavior Tree node failed**.
+
+It simply means:
+
+> "Print this message with ERROR severity."
+
+The node itself still completed its assigned task.
+
+---
+
+# Final case
+
+```cpp
+else
+```
+
+What if someone writes:
+
+```xml
+<LogPrinter
+    log_text="Hello"
+    log_level="PURPLE"/>
+```
+
+The code checks:
+
+```
+INFO?  No
+
+WARN?  No
+
+ERROR? No
+```
+
+Nothing matched.
+
+So execution reaches
+
+```cpp
+else
+```
+
+---
+
+## Print error
+
+```cpp
+RCLCPP_ERROR(
+    node_->get_logger(),
+    "Invalid log level: %s",
+    log_level_.c_str());
+```
+
+Console:
+
+```
+[ERROR]
+Invalid log level: PURPLE
+```
+
+Notice we're **not** printing the user's message.
+
+We're printing an error about the invalid configuration.
+
+---
+
+## Return failure
+
+```cpp
+return BT::NodeStatus::FAILURE;
+```
+
+This tells the Behavior Tree:
+
+> Something went wrong.
+
+The node could not perform its intended job because it received an unsupported log level.
+
+---
+
+# Complete execution flow
+
+Imagine the XML contains:
+
+```xml
+<LogPrinter
+    log_text="Goal reached!"
+    log_level="WARN"/>
+```
+
+The Behavior Tree executes:
+
+```
+Behavior Tree
+      │
+      ▼
+tick()
+      │
+      ▼
+Is INFO?
+      │
+      └──No
+      │
+      ▼
+Is WARN?
+      │
+      └──Yes
+      │
+      ▼
+Print:
+
+[WARN]
+Goal reached!
+      │
+      ▼
+Return SUCCESS
+```
+
+---
+
+# What if the XML contains an invalid value?
+
+```xml
+<LogPrinter
+    log_text="Hello"
+    log_level="BLUE"/>
+```
+
+Execution becomes
+
+```
+tick()
+   │
+   ▼
+INFO?
+  No
+   │
+WARN?
+  No
+   │
+ERROR?
+  No
+   │
+   ▼
+Print
+
+Invalid log level: BLUE
+   │
+   ▼
+Return FAILURE
+```
+
+---
+
+# Overall picture of the entire class
+
+```
+Behavior Tree XML
+
+<LogPrinter
+    log_text="Navigation Started"
+    log_level="INFO"/>
+
+            │
+            ▼
+Constructor
+
+Gets:
+• ROS node
+• log_text
+• log_level
+
+            │
+            ▼
+Behavior Tree later calls
+
+tick()
+
+            │
+            ▼
+Checks log_level
+
+INFO?
+WARN?
+ERROR?
+
+            │
+            ▼
+Prints correct ROS log
+
+            │
+            ▼
+Returns
+
+SUCCESS
+or
+FAILURE
+```
+
+### In plain English
+
+This `tick()` function is the **worker** of the `LogPrinter` node. Every time the Behavior Tree executes it, the function:
+
+1. Looks at the requested log level (`INFO`, `WARN`, or `ERROR`).
+2. Prints the stored message (`log_text_`) using the matching ROS 2 logging function.
+3. Returns `SUCCESS` if the log level is valid and the message was logged.
+4. Returns `FAILURE` if the log level is invalid, allowing the Behavior Tree to react to the configuration error.
+Great! This is the **end of the class** and the **registration** of the node with BehaviorTree.CPP. Without the last few lines, your `LogPrinter` node would exist in C++, but the Behavior Tree engine would **never know it exists**.
+
+Let's go through it line by line.
+
+---
+
+```cpp
+std::string log_text_;
+```
+
+## `std::string log_text_;`
+
+This declares a **member variable** (also called a data member).
+
+Think of a member variable as the class's own storage.
+
+Earlier, in the constructor, we had:
+
+```cpp
+getInput("log_text", log_text_);
+```
+
+That line copied the value from the XML into this variable.
+
+For example:
+
+```xml
+<LogPrinter
+    log_text="Robot started"
+    log_level="INFO"/>
+```
+
+After the constructor:
+
+```text
+log_text_
+↓
+
+"Robot started"
+```
+
+Later, `tick()` uses it:
+
+```cpp
+RCLCPP_INFO(..., log_text_.c_str());
+```
+
+So the flow is:
+
+```text
+XML
+
+"log_text"
+
+      │
+      ▼
+
+Constructor
+
+getInput()
+
+      │
+      ▼
+
+log_text_
+
+      │
+      ▼
+
+tick()
+
+Print it
+```
+
+---
+
+## Next
+
+```cpp
+std::string log_level_;
+```
+
+Another member variable.
+
+It stores the logging level.
+
+Again,
+
+```cpp
+getInput("log_level", log_level_);
+```
+
+fills it.
+
+For example:
+
+```text
+log_level_
+
+↓
+
+"INFO"
+```
+
+Later,
+
+```cpp
+if (log_level_ == "INFO")
+```
+
+uses this stored value.
+
+So these two variables remember the information the constructor loaded.
+
+---
+
+## Next
+
+```cpp
+rclcpp::Node::SharedPtr node_;
+```
+
+This stores a pointer to the ROS 2 node.
+
+Earlier we saw:
+
+```cpp
+node_ =
+config().blackboard->get<rclcpp::Node::SharedPtr>("node");
+```
+
+That copied the shared ROS node from the Blackboard.
+
+Now this member variable points to it.
+
+Think of it like this:
+
+```text
+LogPrinter
+
++-------------------------+
+| node_ --------------------+
+| log_text_              |  |
+| log_level_             |  |
++-------------------------+  |
+                              |
+                              ▼
+                     ROS 2 Node
+                 +----------------+
+                 | Logger         |
+                 | Parameters     |
+                 | Topics         |
+                 +----------------+
+```
+
+Whenever the class wants to log something,
+
+it uses
+
+```cpp
+node_->get_logger()
+```
+
+Without `node_`, the node couldn't call
+
+```cpp
+RCLCPP_INFO(...)
+```
+
+or
+
+```cpp
+RCLCPP_WARN(...)
+```
+
+---
+
+## Closing brace
+
+```cpp
+};
+```
+
+This ends the class definition.
+
+Everything between
+
+```cpp
+class LogPrinter
+{
+```
+
+and
+
+```cpp
+};
+```
+
+belongs to the class.
+
+---
+
+## Closing namespace
+
+```cpp
+}  // namespace goal_navigation_tutorial
+```
+
+This ends the namespace.
+
+Remember the beginning:
+
+```cpp
+namespace goal_navigation_tutorial
+{
+```
+
+Now we're leaving that namespace.
+
+Outside of it,
+
+the class's full name is
+
+```cpp
+goal_navigation_tutorial::LogPrinter
+```
+
+---
+
+# Now comes something very important
+
+```cpp
+#include "behaviortree_cpp_v3/bt_factory.h"
+```
+
+This includes the Behavior Tree Factory.
+
+What is a factory?
+
+A **factory** is simply an object that knows how to create other objects.
+
+Think of a car factory.
+
+```text
+Toyota Factory
+
+Request:
+"Build Corolla"
+
+↓
+
+Factory creates Corolla
+```
+
+BehaviorTree.CPP works the same way.
+
+```text
+Behavior Tree Factory
+
+Request:
+"Build LogPrinter"
+
+↓
+
+Factory creates LogPrinter object
+```
+
+---
+
+# Registration macro
+
+```cpp
+BT_REGISTER_NODES(factory)
+```
+
+This is a macro supplied by BehaviorTree.CPP.
+
+When your plugin is loaded,
+
+this macro automatically runs.
+
+You can imagine it expanding conceptually into something like:
+
+```text
+When loaded,
+
+register all custom nodes.
+```
+
+---
+
+## Opening brace
+
+```cpp
+{
+```
+
+Inside here,
+
+you tell the factory which nodes exist.
+
+---
+
+## Registration
+
+```cpp
+factory.registerNodeType<
+goal_navigation_tutorial::LogPrinter
+>("LogPrinter");
+```
+
+This is probably the most important line after `tick()`.
+
+Let's break it apart.
+
+---
+
+### `factory`
+
+This is the Behavior Tree Factory.
+
+It manages all available node types.
+
+---
+
+### `registerNodeType`
+
+This means:
+
+> Add a new node type to the factory.
+
+---
+
+### `<goal_navigation_tutorial::LogPrinter>`
+
+This tells the compiler:
+
+> The C++ class is
+
+```cpp
+goal_navigation_tutorial::LogPrinter
+```
+
+---
+
+### `"LogPrinter"`
+
+This is the XML name.
+
+Now the Behavior Tree engine knows:
+
+```text
+XML
+
+<LogPrinter>
+
+↓
+
+means
+
+↓
+
+goal_navigation_tutorial::LogPrinter
+```
+
+Without this registration,
+
+the XML parser would say:
+
+> Unknown node type: LogPrinter
+
+because it has never heard of your class.
+
+---
+
+# Entire process
+
+Suppose your XML contains
+
+```xml
+<BehaviorTree>
+
+    <Sequence>
+
+        <LogPrinter
+            log_text="Robot Ready"
+            log_level="INFO"/>
+
+    </Sequence>
+
+</BehaviorTree>
+```
+
+Here's what happens:
+
+```text
+Behavior Tree starts
+
+        │
+        ▼
+
+Loads plugin
+
+        │
+        ▼
+
+BT_REGISTER_NODES()
+
+        │
+        ▼
+
+Factory now knows
+
+"LogPrinter"
+
+↓
+
+goal_navigation_tutorial::LogPrinter
+
+        │
+        ▼
+
+Reads XML
+
+<LogPrinter>
+
+        │
+        ▼
+
+Factory creates
+
+LogPrinter object
+
+        │
+        ▼
+
+Constructor runs
+
+        │
+        ▼
+
+tick()
+
+        │
+        ▼
+
+Console prints
+
+[INFO]
+
+Robot Ready
+```
+
+---
+
+# Think of the factory like a phone book
+
+Imagine a phone book.
+
+```text
+Name
+
+↓
+
+Phone Number
+
+John
+
+↓
+
+555-1234
+```
+
+The Behavior Tree Factory stores
+
+```text
+XML Name
+
+↓
+
+C++ Class
+
+"LogPrinter"
+
+↓
+
+goal_navigation_tutorial::LogPrinter
+```
+
+Whenever the XML asks for
+
+```xml
+<LogPrinter>
+```
+
+the factory immediately knows which C++ class to instantiate.
+
+---
+
+# Summary of the entire file
+
+By the time you've reached the end of this tutorial, you've built a complete custom Behavior Tree node:
+
+```text
+1. Namespace
+      │
+      ▼
+Organizes the code
+
+2. Class
+      │
+      ▼
+Creates LogPrinter
+
+3. Constructor
+      │
+      ▼
+Gets ROS node from Blackboard
+Reads XML inputs
+
+4. providedPorts()
+      │
+      ▼
+Declares:
+
+• log_text
+• log_level
+
+5. tick()
+      │
+      ▼
+Prints INFO/WARN/ERROR messages
+
+6. Member variables
+      │
+      ▼
+Store:
+
+• log_text_
+• log_level_
+• node_
+
+7. Register node
+      │
+      ▼
+Behavior Tree Factory learns:
+
+XML:
+
+<LogPrinter>
+
+↓
+
+C++:
+
+goal_navigation_tutorial::LogPrinter
+```
+
+This is the complete lifecycle of a custom BehaviorTree.CPP node: **declare what inputs it accepts (`providedPorts()`), initialize it (constructor), perform its work (`tick()`), store any needed state (member variables), and finally register it so the Behavior Tree engine can create it from an XML file.**
+## Compile and Install Day_Log 07/29/2026:
+
 
 
 
