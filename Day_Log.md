@@ -8614,3 +8614,335 @@ When you build your plugin, the process looks like this:
    * "Install it where Nav2 can find it."
 
 3. **Nav2** later loads your compiled plugin at runtime and can execute your custom Behavior Tree node.
+   # Day_Log.md 08/05/2026:
+   Of course! This section is not programming yet—it's preparing folders and a file so your robot knows where to find your custom Behavior Tree. Here's each line explained in plain English.
+
+---
+
+## Title:
+
+**Add your custom plugin to the Behavior Tree**
+
+**Layman's explanation:**
+
+Imagine your robot follows a checklist every time it performs a task. That checklist is called a **Behavior Tree (BT)**.
+
+Right now, you're going to make your own copy of that checklist so you can add your custom plugin (your new robot behavior).
+
+---
+
+## Line:
+
+> **To add your custom plugin to the Behavior Tree used by the bt_navigator, you need to create a new XML file**
+
+**Layman's explanation:**
+
+The robot's navigation system is called **bt_navigator**.
+
+Think of **bt_navigator** as the robot's manager.
+
+Instead of making decisions itself, the manager reads instructions from a file.
+
+That instruction file is called an **XML file**.
+
+Imagine it like this:
+
+```
+Robot Manager
+      │
+      ▼
+Reads instruction book
+(my_custom_bt.xml)
+      │
+      ▼
+Step 1
+Step 2
+Step 3
+Call your plugin
+Continue driving
+```
+
+The XML file does **not** contain C++ code.
+
+Instead, it simply tells the robot:
+
+> "After this step, run my custom plugin."
+
+---
+
+## Line:
+
+> **In order to do this you first need to create a new directory in the .pal folder of your robot.**
+
+**Layman's explanation:**
+
+Before you can save your instruction book (XML file), you need a folder to keep it in.
+
+Think of your computer like this:
+
+```
+Computer
+
+Documents
+Pictures
+Downloads
+Desktop
+Music
+```
+
+You're creating another folder that belongs specifically to PAL Robotics.
+
+---
+
+## Line
+
+```bash
+mkdir -p ~/.pal/pal_navigation_cfg_params/params/nav2_bt_navigator
+```
+
+Let's break it apart.
+
+---
+
+### mkdir
+
+Means
+
+> **Make Directory**
+
+In other words,
+
+> "Create a new folder."
+
+---
+
+### -p
+
+The **-p** means
+
+> "If some of these folders don't exist yet, create all of them."
+
+Without **-p**, Linux would complain if a parent folder were missing.
+
+With it:
+
+```
+.pal
+     ↓
+pal_navigation_cfg_params
+     ↓
+params
+     ↓
+nav2_bt_navigator
+```
+
+Linux builds the whole chain automatically.
+
+---
+
+### ~
+
+The tilde
+
+```
+~
+```
+
+means
+
+> **Your Home Folder**
+
+For example
+
+```
+/home/selwyn
+```
+
+or
+
+```
+/home/username
+```
+
+So
+
+```
+~
+```
+
+is simply a shortcut.
+
+---
+
+### /.pal
+
+```
+.pal
+```
+
+This is a hidden folder because its name begins with a period (`.`).
+
+Linux hides folders that start with a dot.
+
+Think of it like:
+
+```
+Home Folder
+
+Desktop
+Documents
+Downloads
+.pal
+.cache
+.config
+```
+
+The `.pal` folder stores PAL Robotics configuration files.
+
+---
+
+### /pal_navigation_cfg_params
+
+This folder stores
+
+**Navigation Configuration Parameters**
+
+In plain English:
+
+> "Robot navigation settings."
+
+---
+
+### /params
+
+Means
+
+> "Parameters"
+
+Parameters are simply **settings** the robot uses.
+
+Examples include:
+
+* robot speed
+* obstacle distance
+* planner settings
+* Behavior Tree settings
+
+---
+
+### /nav2_bt_navigator
+
+This folder specifically stores files used by **Nav2's Behavior Tree Navigator**.
+
+Think of it like:
+
+```
+Navigation Settings
+        │
+        ├── planner
+        ├── controller
+        ├── recovery
+        └── Behavior Trees
+```
+
+Your XML files belong here.
+
+---
+
+So the entire command means:
+
+> "Inside my home folder, create the hidden `.pal` folder path (if needed) and make sure there is a `nav2_bt_navigator` folder where my Behavior Tree files will live."
+
+---
+
+## Next line
+
+> **And then, within this folder, you can create a new XML file for your custom Behavior Tree.**
+
+**Layman's explanation:**
+
+Now that the filing cabinet (folder) exists, you're creating a new blank instruction sheet (XML file) that you'll fill in later with your robot's behavior.
+
+---
+
+## Line
+
+```bash
+touch ~/.pal/pal_navigation_cfg_params/params/nav2_bt_navigator/my_custom_bt_w_custom_plugin.xml
+```
+
+Let's break it apart.
+
+---
+
+### touch
+
+The `touch` command creates a new empty file if it doesn't already exist.
+
+Think of it like putting a blank sheet of paper into your filing cabinet.
+
+---
+
+### ~/.pal/pal_navigation_cfg_params/params/nav2_bt_navigator/
+
+This is the folder you just created.
+
+---
+
+### my_custom_bt_w_custom_plugin.xml
+
+This is the name of your new file.
+
+Breaking the name apart:
+
+```
+my
+```
+
+Your own.
+
+```
+custom
+```
+
+Not the robot's default version.
+
+```
+bt
+```
+
+Behavior Tree.
+
+```
+w
+```
+
+Short for **with**.
+
+```
+custom_plugin
+```
+
+Your own Behavior Tree plugin will be added.
+
+```
+.xml
+```
+
+This tells Linux the file is an XML document.
+
+---
+
+After running the command, your folder will look something like this:
+
+```
+Home
+└── .pal
+    └── pal_navigation_cfg_params
+        └── params
+            └── nav2_bt_navigator
+                └── my_custom_bt_w_custom_plugin.xml
+```
+
+At this point, the file is still empty. In the next step of the tutorial, you'll edit this XML file to define the Behavior Tree and include your custom plugin so `bt_navigator` knows when to run it.
+
