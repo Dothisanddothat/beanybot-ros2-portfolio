@@ -9631,4 +9631,118 @@ The bigger conceptual achievement here is that you're no longer simply telling N
 #Organizing Robot Scenarios with Classes
 When working with multiple robots performing similar tasks, it’s helpful to encapsulate the robot setup and control logic into reusable classes. This approach allows you to easily create multiple instances with different parameters (like position offsets). 
 
+# Day_Log 08/15/2026:
+
+# Issac Sim Tutorial with the robot Franka:
+Absolutely. We’ll take the Isaac Sim tutorial **one line at a time**, in plain English, and connect each line to what it actually does in the simulation.
+
+### Line 1
+
+```python
+import isaacsim.core.experimental.utils.stage as stage_utils
+```
+
+Think of this as saying:
+
+> **“Isaac Sim, give my Python program access to your tools for working with the simulation Stage. I’m going to call those tools `stage_utils`.”**
+
+Breaking it apart:
+
+* **`import`** — tells Python, “I need some code/tools that already exist.”
+* **`isaacsim`** — the main Isaac Sim Python package.
+* **`core.experimental.utils.stage`** — the particular collection of Isaac Sim utilities for working with the **Stage**.
+* **`as stage_utils`** — gives that long package name a convenient nickname.
+
+So later, instead of writing something long like:
+
+```python
+isaacsim.core.experimental.utils.stage.some_function()
+```
+
+the tutorial can write:
+
+```python
+stage_utils.some_function()
+```
+
+### What is the **Stage**?
+
+The **Stage is basically the entire simulated world currently loaded in Isaac Sim**.
+
+For this tutorial, imagine the Stage containing:
+
+```text
+ISAAC SIM STAGE
+│
+├── Jetbot
+│
+├── Cube
+│
+├── Franka robot
+│
+├── Ground
+│
+├── Lights
+└── Cameras
+```
+So Line 1 **doesn't create the Jetbot, cube, or Franka yet**.
+
+It simply puts a toolbox called `stage_utils` into your Python script so upcoming lines can work with the Isaac Sim Stage.
+
+So the layman's version of **Line 1** is:
+
+> **“Load Isaac Sim's Stage-management toolbox and give it the short name `stage_utils` so I can use it later.”**
+Line 2> ### Line 2
+
+```python
+import numpy as np
+```
+
+In layman's terms:
+
+> **“Python, load the NumPy math toolbox, and from now on I'll call it `np` for short.”**
+
+Breaking it down:
+
+* **`import`** = bring an existing toolbox into this program.
+* **`numpy`** = a Python library designed for working with **numbers, coordinates, vectors, arrays, and mathematical calculations**.
+* **`as np`** = give NumPy the shorter nickname **`np`**.
+
+So instead of writing:
+
+```python
+numpy.array([1.0, 2.0, 3.0])
+```
+
+the tutorial can simply write:
+
+```python
+np.array([1.0, 2.0, 3.0])
+```
+
+### Why would a robot simulation need NumPy?
+
+Robots constantly deal with numbers representing things such as:
+
+```text
+Jetbot position:  [2.0, 1.0, 0.0]
+Cube position:    [4.0, 1.0, 0.0]
+Franka position:  [6.0, 1.0, 0.0]
+```
+
+Those are essentially **X, Y, Z coordinates**.
+
+That's directly relevant to your BeanyBot simulation. When you're positioning B2, cocoa trees, pods, or the drying area at particular X and Y coordinates, NumPy can hold and manipulate those coordinate values.
+
+So remember Line 2 simply as:
+
+> **`import numpy as np` = “Bring me the NumPy math-and-numbers toolbox, and I'll call it `np`.”**
+
+It hasn't actually **done any math yet**. It has merely made the toolbox available for later lines.
+
+# Day_Log 08/16/2026:
+
+# Line 3: 
+
+
 
