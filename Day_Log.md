@@ -9740,9 +9740,45 @@ So remember Line 2 simply as:
 
 It hasn't actually **done any math yet**. It has merely made the toolbox available for later lines.
 
-# Day_Log 08/16/2026:
+# Day_Log 08/23/2026:
 
 # Line 3: 
+Absolutely. Here is **Line 3**:
+
+```python
+from isaacsim.core.experimental.objects import Cube, DomeLight, GroundPlane
+```
+
+### In layman’s terms
+
+This line tells Isaac Sim:
+
+> **“I’m going to need three ready-made things: a cube, a light, and a ground surface. Please make those tools available to my Python program.”**
+
+Breaking it apart:
+
+* **`from isaacsim.core.experimental.objects`** → Go to this particular part of the Isaac Sim Python library where these simulation objects are defined.
+* **`import`** → Bring the following things into my program so I can use them.
+* **`Cube`** → Gives your program the ability to create and control a **3D cube**.
+* **`DomeLight`** → Gives your simulation a **light source** that illuminates the scene.
+* **`GroundPlane`** → Gives your simulation a **flat ground/floor** for the robots and objects to stand and move on.
+
+So later, when your `RobotScenario` needs a cube for the Jetbot to push, Python already knows what **`Cube`** means because you imported it here.
+
+A simple analogy is:
+
+> **You are setting up a workshop. Line 3 goes to the Isaac Sim tool cabinet and takes out three tools: Cube, DomeLight, and GroundPlane, because you know you'll need them later.**
+
+Importantly, **Line 3 does not actually create the cube, light, or ground yet.** It only makes their definitions available. A later line will actually create an instance, such as something conceptually like:
+
+```python
+cube = Cube(...)
+```
+
+That's when you're saying, **“Okay, now actually give me a cube.”**
+# Day_Log 8/28/26:
+
+
 
 
 
