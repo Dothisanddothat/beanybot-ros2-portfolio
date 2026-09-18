@@ -9776,7 +9776,34 @@ cube = Cube(...)
 ```
 
 That's when you're saying, **“Okay, now actually give me a cube.”**
-# Day_Log 8/28/26:
+# Day_Log 9/18/26:
+Here’s Line 6 in plain, everyday language:
+from isaacsim.core.simulation_manager import SimulationEvent, SimulationManager
+What this line does
+This line tells your Python program:
+“Go into Isaac Sim’s simulation-management toolbox and bring me two tools: SimulationEvent and SimulationManager, because I’m going to use them later.”
+Think of it like getting two tools out of a toolbox before starting work.
+SimulationManager = the manager/control center for the simulation. It helps your program interact with and manage what is happening in the simulation.
+SimulationEvent = represents important events or changes that happen during the simulation, so your program can recognize or respond to them.
+Breaking the line apart
+from isaacsim.core.simulation_manager
+means:
+“Go to this particular part of the Isaac Sim software.”
+Then:
+import SimulationEvent, SimulationManager
+means:
+“Bring these two specific tools into my Python program.”
+Robotics analogy 🤖
+Imagine your robotics simulation is a banana farm operation.
+SimulationManager is like the farm supervisor. It helps coordinate what is happening in the simulated environment.
+SimulationEvent is like the supervisor being told:
+“Something just happened in the operation—respond appropriately.”
+So a good one-sentence explanation for your notes is:
+Line 6 imports two Isaac Sim tools that allow the Python program to manage the simulation and recognize important simulation events.
+# Day_Log 9/18/26:
+
+
+
 
 
 
