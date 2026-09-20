@@ -9800,8 +9800,40 @@ SimulationEvent is like the supervisor being told:
 “Something just happened in the operation—respond appropriately.”
 So a good one-sentence explanation for your notes is:
 Line 6 imports two Isaac Sim tools that allow the Python program to manage the simulation and recognize important simulation events.
-# Day_Log 9/18/26:
+# Day_Log 9/19/26:
+Line 7:
 
+Understanding BaseSample in Simple Terms
+
+from isaacsim.examples.base.base_sample_experimental import BaseSample.
+
+Think of BaseSample like buying a pre-built computer instead of manufacturing a computer yourself.
+
+When you buy a computer, you don't have to manufacture the processor, motherboard, memory, power supply, and case before you can start using it. The basic platform has already been built for you. You can then install your own software and customize the computer for whatever project you want to create.
+
+BaseSample serves a similar purpose in NVIDIA Isaac Sim.
+
+Isaac Sim provides the basic simulation framework, and the programmer can build a custom simulation on top of that foundation.
+
+So this line:
+
+from isaacsim.examples.base.base_sample_experimental import BaseSample
+
+essentially tells Python:
+
+“Go to the Isaac Sim examples library, find the BaseSample class, and make it available to my program.”
+
+Then a programmer can create something like:
+
+class MySimulation(BaseSample):
+
+This means:
+
+“Create my simulation using Isaac Sim's BaseSample as its foundation.”
+
+Instead of building all of the basic simulation-management functionality from scratch, the programmer starts with the framework NVIDIA already provides and adds the features needed for their own application.
+# Day_Log 9/26/26:
+Line 8:
 
 
 
