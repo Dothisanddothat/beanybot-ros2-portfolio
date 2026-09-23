@@ -9832,8 +9832,135 @@ This means:
 “Create my simulation using Isaac Sim's BaseSample as its foundation.”
 
 Instead of building all of the basic simulation-management functionality from scratch, the programmer starts with the framework NVIDIA already provides and adds the features needed for their own application.
-# Day_Log 9/26/26:
+# Day_Log 9/22/26:
 Line 8:
+Absolutely. Here’s **line 7 in plain English**, with a completely neutral example you can safely post publicly.
+
+### Line 8
+```python
+from isaacsim.storage.native import get_assets_root_path
+```
+
+### What does it mean?
+
+This line tells Python:
+
+> **“Go into NVIDIA Isaac Sim’s storage tools, find the function called `get_assets_root_path`, and make it available for me to use in this program.”**
+
+Think of **Isaac Sim’s assets** as a large digital warehouse. That warehouse can contain things such as:
+
+- Robot models
+- Buildings
+- Tables and furniture
+- Vehicles
+- Materials and textures
+- Example environments
+- Other 3D objects
+
+The function:
+
+```python
+get_assets_root_path
+```
+
+helps your program figure out **where that main Isaac Sim asset collection is located**.
+
+### Break the line into pieces
+
+```python
+from isaacsim.storage.native
+```
+
+means:
+
+> “Look inside this particular part of Isaac Sim.”
+
+Then:
+
+```python
+import get_assets_root_path
+```
+
+means:
+
+> “Bring me this specific tool so I can use it.”
+
+### Simple analogy
+
+Imagine you walk into a huge public library and tell the librarian:
+
+> “Before I can find the book I need, tell me where the main collection begins.”
+
+`get_assets_root_path()` does something similar for your Python program. Instead of you manually typing the full location of Isaac Sim's asset library, the function asks Isaac Sim for its **root asset location**.
+
+For example, later in a program you might see:
+
+```python
+assets_root_path = get_assets_root_path()
+```
+
+Now `assets_root_path` stores the location that Isaac Sim provided.
+
+Then the program can build a path to a particular asset:
+
+```python
+my_asset = assets_root_path + "/Isaac/Props/Furniture/table.usd"
+```
+
+Conceptually, that means:
+
+> **“Start at Isaac Sim's main asset location, then go into the folders until you find the table model.”**
+
+### Why is this useful?
+
+Without a function like this, a programmer might have to hard-code a long asset location into the program. That can cause problems if the location changes between computers, installations, or Isaac Sim configurations.
+
+So in one sentence:
+
+**`from isaacsim.storage.native import get_assets_root_path` imports a tool that lets a Python program ask Isaac Sim where its main asset library is located.**
+# Day_Log 9/22/26:
+
+Line 10: Understanding Python in NVIDIA Isaac Sim
+
+app_utils.enable_extension("isaacsim.robot_motion.examples")
+
+What does this line mean?
+
+This line tells NVIDIA Isaac Sim to turn on a particular extension that provides examples of robot motion.
+
+Think of Isaac Sim as a smartphone. Your smartphone has many applications, but you don't need every application running simultaneously.
+
+Similarly, Isaac Sim has extensions that add different capabilities. Some help simulate robots, others provide sensors, physics tools or example programs.
+
+Breaking down line 10
+
+app_utils — A collection of application utilities that help manage Isaac Sim.
+
+enable_extension() — A command that tells Isaac Sim to activate a particular extension.
+
+"isaacsim.robot_motion.examples" — The name of the extension containing robot motion examples.
+
+A simple example
+
+Imagine you're taking a robotics course and your professor asks you to study how a robotic arm moves from one position to another.
+
+Before exploring the examples, you need to activate the appropriate extension.
+
+app_utils.enable_extension("isaacsim.robot_motion.examples")
+
+This makes the robot motion examples extension available within Isaac Sim.
+
+An important distinction
+
+Enabling this extension does not automatically make a robot move. It activates the extension so its examples and associated functionality can be used.
+
+Why is this important?
+
+Isaac Sim uses a modular architecture. Instead of loading every available feature, developers can enable the extensions needed for a particular project.
+
+In one sentence: Line 10 tells NVIDIA Isaac Sim to activate its robot motion examples extension so the programmer can access those examples when developing or studying robotic movement.
+# Day_Log 9/23/26:
+Line 12:
 
 
 
