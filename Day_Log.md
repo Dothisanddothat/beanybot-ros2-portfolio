@@ -9959,8 +9959,38 @@ Why is this important?
 Isaac Sim uses a modular architecture. Instead of loading every available feature, developers can enable the extensions needed for a particular project.
 
 In one sentence: Line 10 tells NVIDIA Isaac Sim to activate its robot motion examples extension so the programmer can access those examples when developing or studying robotic movement.
-# Day_Log 9/23/26:
+# Day_Log 9/26/26:
 Line 12:
+In layman’s terms, this line:
+
+```python
+from isaacsim.robot_motion.examples.manipulation import PickPlaceTask
+```
+
+means:
+
+**“Go into NVIDIA Isaac Sim’s robot-motion examples, find the ready-made instructions for a robot doing a pick-and-place task, and make those instructions available to my Python program.”**
+
+Breaking it down:
+
+- **`from`** → tells Python where to look.
+- **`isaacsim.robot_motion.examples.manipulation`** → the location inside Isaac Sim containing examples related to robots manipulating objects.
+- **`import`** → tells Python to bring something from that location into your program.
+- **`PickPlaceTask`** → the specific prebuilt task you want to use.
+
+Imagine a robot arm sitting next to a table. There is a **red cube** on the left side of the table.
+
+A pick-and-place task could tell the simulation that the robot's job is:
+
+**Start → reach for the red cube → pick it up → move it → place it at another location.**
+
+`PickPlaceTask` provides the framework for defining that kind of job. Your program can then build on it instead of you having to create the entire concept of a pick-and-place task from scratch.
+
+So a good one-sentence explanation for **Line 12** is:
+
+> **Line 12 imports Isaac Sim’s prebuilt PickPlaceTask class, which provides a framework for creating a simulation where a robot picks up an object and places it somewhere else.**
+# Day_Log 9/26/26:
+Lines 15 & 16:
 
 
 
