@@ -9989,8 +9989,39 @@ A pick-and-place task could tell the simulation that the robot's job is:
 So a good one-sentence explanation for **Line 12** is:
 
 > **Line 12 imports Isaac Sim’s prebuilt PickPlaceTask class, which provides a framework for creating a simulation where a robot picks up an object and places it somewhere else.**
-# Day_Log 9/26/26:
+# Day_Log 10/14/26:
 Lines 15 & 16:
+Lines 15 & 16: class RobotScenario:
+
+    """Encapsulates a Jetbot + Franka + Cube scenario with an offset."""
+
+This Python code creates a class called RobotScenario that organizes a robotics simulation involving two robots and a cube.
+
+Here's what each part means in everyday language:
+
+class RobotScenario: Creates a blueprint for organizing and managing the simulation.
+
+Encapsulates means keeping the different parts of the simulation together in one organized structure.
+
+Jetbot is a small mobile robot that can move around.
+
+Franka is a robotic arm designed to manipulate objects.
+
+Cube is an object used in the simulation.
+
+with an offset means the objects can be positioned at a specified distance from a reference location.
+
+
+
+This Python class organizes a robotics simulation involving a mobile Jetbot robot, a Franka robotic arm, and a cube. It keeps the components together in one structured scenario and allows their positions to be adjusted using an offset.
+
+This approach helps make robotics simulation code more organized, reusable, and easier to maintain.
+
+In the simplest terms: You're creating a blueprint that tells the simulation which robots and objects belong together and where they should be positioned.
+
+One important distinction: This line defines the class and describes its purpose. It does not actually move the robots or execute the simulation.
+# Day_Log 10/14/26:
+
 
 
 
