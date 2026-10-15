@@ -10020,8 +10020,25 @@ This approach helps make robotics simulation code more organized, reusable, and 
 In the simplest terms: You're creating a blueprint that tells the simulation which robots and objects belong together and where they should be positioned.
 
 One important distinction: This line defines the class and describes its purpose. It does not actually move the robots or execute the simulation.
-# Day_Log 10/14/26:
-
+# Day_Log 10/15/26:
+Line 18 — Explained in Layman's Terms
+def __init__(self, name: str, offset: np.ndarray = np.array([0.0, 0.0, 0.0])):
+In simple English:
+This line sets up a new object by giving it a name and an optional starting position in three-dimensional space.
+Here's what each part means:
+def __init__(self, ...) — A special function that runs automatically when a new object is created.
+name: str — Gives the object a name, which must be text, such as "Box1".
+offset: np.ndarray — Represents a position adjustment using a NumPy array.
+np.array([0.0, 0.0, 0.0]) — Sets the default adjustment to zero along all three axes: X, Y, and Z.
+A Simple Example
+Imagine placing a box in a 3D computer simulation.
+X = left or right
+Y = forward or backward
+Z = up or down
+The values [0.0, 0.0, 0.0] mean the box starts with no additional position adjustment.
+"This line initializes a new object with a name and an optional 3D position offset, defaulting to zero movement along the X, Y, and Z axes."
+Technical note: Python does not strictly enforce str or np.ndarray type hints automatically. Also, using a NumPy array as a default argument can cause shared mutable-state issues if the array is modified.
+# Day_Log 10/15/26:
 
 
 
