@@ -10082,8 +10082,24 @@ Before a robot can perform a task, its program needs to establish its identity, 
 These few lines demonstrate how Python organizes information so a robotics program can operate in a structured way.
 
 #Python #Robotics #Programming #RobotSimulation #LearnPython #STEM
-# Day_Log 10/21/26:
+# Day_Log 10/30/26:
+Python Code Explained — Lines 27–30
+Line 27: def setup_scene(self):
 
+This line creates a function called setup_scene. Think of it as telling the computer, “Get the virtual environment ready.” This function organizes the objects needed for the simulation.
+
+Line 28: """Create the robots and cube for this scenario."""
+
+This is a description, called a docstring. It explains that the function will create the robots and a cube used in the simulation. It is written for people reading the code, not as an instruction the computer executes.
+
+Line 29: assets_root_path = get_assets_root_path()
+
+This line tells the program to locate the main folder containing the simulation's digital assets. These assets may include 3D robot models, objects, and other resources needed to build the virtual environment.
+
+Line 30: base_path = f"/World/{self.name}"
+
+This line creates a location within the simulation's virtual world where objects can be organized. The program uses the scenario's name to create a unique path, helping keep everything properly arranged.
+# Day_Log 10/30/26:
 
 
 
